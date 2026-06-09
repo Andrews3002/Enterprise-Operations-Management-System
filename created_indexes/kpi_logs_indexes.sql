@@ -1,0 +1,1 @@
+CREATE INDEX idx_kpi_dept_date        ON kpi_logs(dept_id, snapshot_date);
