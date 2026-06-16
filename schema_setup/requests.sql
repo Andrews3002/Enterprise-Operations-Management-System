@@ -12,3 +12,21 @@ CREATE TABLE requests (
     CONSTRAINT fk_req_stage     FOREIGN KEY (current_stage) REFERENCES workflow_stages(stage_id),
     CONSTRAINT check_req_status   CHECK (status IN ('PENDING','IN_REVIEW','APPROVED','REJECTED','ESCALATED','CLOSED'))
 );
+
+ALTER TABLE requests
+DROP CONSTRAINT check_req_status;
+
+ALTER TABLE requests
+ADD CONSTRAINT check_req_status
+CHECK (
+    status IN (
+        'PENDING',
+        'IN_REVIEW',
+        'APPROVED',
+        'REJECTED',
+        'IN_PROGRESS',
+        'COMPLETED',
+        'CANCELLED',
+        'ESCALATED'
+    )
+);
