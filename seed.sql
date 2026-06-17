@@ -12,6 +12,13 @@ INSERT INTO departments (dept_name) VALUES ('Accounts');
 INSERT INTO departments (dept_name) VALUES ('Procurement');
 INSERT INTO departments (dept_name) VALUES ('Internal Audit');
 
+-- Annual Budgets for each department
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (21, 2026, 600000);
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (22, 2026, 3000000);
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (23, 2026, 1500000);
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (24, 2026, 400000);
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (25, 2026, 200000);
+
 -- Human Resources
 INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('John', 'Smith', 'john.smith@company.com', 1, 1);

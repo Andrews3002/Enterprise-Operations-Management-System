@@ -3106,3 +3106,1589 @@ INSERT INTO departments (dept_name) VALUES ('Internal Audit');
 
 COMMIT;
 ----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('John', 'Smith', 'john.smith@company.com', 21, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Sarah', 'Williams', 'sarah.williams@company.com', 21, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Michael', 'Brown', 'michael.brown@company.com', 21, 22);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Jennifer', 'Davis', 'jennifer.davis@company.com', 21, 23);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Robert', 'Miller', 'robert.miller@company.com', 21, 24);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('David', 'Taylor', 'david.taylor@company.com', 22, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Emma', 'Anderson', 'emma.anderson@company.com', 22, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('James', 'Thomas', 'james.thomas@company.com', 22, 22);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Olivia', 'Jackson', 'olivia.jackson@company.com', 22, 23);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('William', 'White', 'william.white@company.com', 22, 24);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Sophia', 'Harris', 'sophia.harris@company.com', 22, 25);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Benjamin', 'Martin', 'benjamin.martin@company.com', 23, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Mia', 'Thompson', 'mia.thompson@company.com', 23, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Lucas', 'Garcia', 'lucas.garcia@company.com', 23, 22);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Charlotte', 'Martinez', 'charlotte.martinez@company.com', 23, 23);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Henry', 'Robinson', 'henry.robinson@company.com', 23, 24);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Joseph', 'Young', 'joseph.young@company.com', 25, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Ella', 'King', 'ella.king@company.com', 25, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Samuel', 'Wright', 'samuel.wright@company.com', 25, 22);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Grace', 'Scott', 'grace.scott@company.com', 25, 23);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Andrew', 'Green', 'andrew.green@company.com', 25, 24);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO workflows (workflow_name, sla_hours) VALUES ('Leave Request', 48);
+INSERT INTO workflows (workflow_name, sla_hours) VALUES ('Equipment Request', 72);
+INSERT INTO workflows (workflow_name, sla_hours) VALUES ('Overtime Request', 24);
+INSERT INTO workflows (workflow_name, sla_hours) VALUES ('Incident Report', 12);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (21, 'Supervisor Review', 1, 21, 2);
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (21, 'HR Approval', 2, 21, 2);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (22, 'Supervisor Review', 1, 24, 2);
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (22, 'Procuement Approval', 2, 24, 2);
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (22, 'Finance Sign-off', 3, 23, 2);
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (22, 'Implementation', 4, 24, 2);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (23, 'Supervisor Review', 1, 21, 2);
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (23, 'HR Approval', 2, 21, 2);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (24, 'Supervisor Review', 1, 25, 2);
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (24, 'Internal Audit Approval', 2, 25, 2);
+INSERT INTO workflow_stages (workflow_id, stage_name, stage_seq, dept_id, required_level)
+    VALUES (24, 'Implementation', 3, 25, 2);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Alexander', 'Rodriguez', 'alexander.rodriguez@company.com', 24, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Harper', 'Lewis', 'harper.lewis@company.com', 24, 21);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Daniel', 'Lee', 'daniel.lee@company.com', 24, 22);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Evelyn', 'Walker', 'evelyn.walker@company.com', 24, 23);
+INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
+VALUES ('Matthew', 'Hall', 'matthew.hall@company.com', 24, 24);
+
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+SET SERVEROUTPUT ON;
+
+DECLARE
+    v_id NUMBER;
+BEGIN
+    v_id := workflow_pkg.submit_request(
+        p_emp_id      => 22,
+        p_workflow_id => 21,
+        p_notes       => 'Annual leave, 5 days from July 1'
+    );
+    DBMS_OUTPUT.PUT_LINE('Created request_id: ' || v_id);
+END;
+/
+----------------------------------------------------------------------------------------------------------------------------------
+SET SERVEROUTPUT ON;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(
+        workflow_pkg.get_sla_status(1)
+    );
+END;
+/
+----------------------------------------------------------------------------------------------------------------------------------
+create or replace PACKAGE BODY workflow_pkg AS
+
+    
+    --------------------------------------------------------- get the first stage_id for a workflow
+    FUNCTION get_first_stage (p_workflow_id IN NUMBER) RETURN NUMBER AS
+        v_stage_id workflow_stages.stage_id%TYPE;
+    BEGIN
+        SELECT stage_id
+        INTO v_stage_id
+        FROM workflow_stages
+        WHERE workflow_id = p_workflow_id
+        AND stage_seq   = (
+                   SELECT MIN(stage_seq)
+                   FROM   workflow_stages
+                   WHERE  workflow_id = p_workflow_id
+               );
+        RETURN v_stage_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20001,
+                'No stages defined for workflow_id ' || p_workflow_id);
+    END get_first_stage;
+
+
+    ----------------------------- get the next stage_id after the current one for the specific workflow
+    FUNCTION get_next_stage (
+        p_workflow_id IN NUMBER,
+        p_current_stage_id IN NUMBER
+    ) RETURN NUMBER AS
+        v_current_seq workflow_stages.stage_seq%TYPE;
+        v_next_stage workflow_stages.stage_id%TYPE;
+    BEGIN
+        SELECT stage_seq INTO v_current_seq
+        FROM workflow_stages
+        WHERE stage_id = p_current_stage_id;
+
+        SELECT stage_id INTO v_next_stage
+        FROM workflow_stages
+        WHERE workflow_id = p_workflow_id
+        AND stage_seq = (
+                   SELECT MIN(stage_seq)
+                   FROM workflow_stages
+                   WHERE workflow_id  = p_workflow_id
+                   AND stage_seq    > v_current_seq
+               );
+        RETURN v_next_stage;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN NULL;
+    END get_next_stage;
+
+
+    ------------------------------------------------------------------- submit_request
+    FUNCTION submit_request (
+        p_emp_id IN NUMBER,
+        p_workflow_id IN NUMBER,
+        p_notes IN VARCHAR2 DEFAULT NULL
+    ) RETURN NUMBER AS
+        v_request_id  requests.request_id%TYPE;
+        v_first_stage requests.current_stage%TYPE;
+    BEGIN
+        DECLARE
+            v_check NUMBER;
+        BEGIN
+            SELECT 1 INTO v_check
+            FROM employees
+            WHERE emp_id = p_emp_id AND is_active = 1;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20002,
+                    'Employee ' || p_emp_id || ' not found or inactive.');
+        END;
+
+        DECLARE
+            v_check NUMBER;
+        BEGIN
+            SELECT 1 INTO v_check
+            FROM workflows
+            WHERE workflow_id = p_workflow_id AND is_active = 1;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20003,
+                    'Workflow ' || p_workflow_id || ' not found or inactive.');
+        END;
+
+        v_first_stage := get_first_stage(p_workflow_id);
+
+        INSERT INTO requests (
+            workflow_id, submitted_by, current_stage, status, notes
+        ) VALUES (
+            p_workflow_id, p_emp_id, v_first_stage, 'PENDING', p_notes
+        )
+        RETURNING request_id INTO v_request_id;
+
+        log_audit(
+            p_table_name => 'REQUESTS',
+            p_record_id => v_request_id,
+            p_action => 'INSERT',
+            p_changed_by => p_emp_id,
+            p_new_value => 'status=PENDING, stage=' || v_first_stage
+        );
+
+        COMMIT;
+        RETURN v_request_id;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END submit_request;
+
+    ----------------------------------------------------------------------- decide_stage
+    PROCEDURE decide_stage (
+        p_request_id IN NUMBER,
+        p_decider_id IN NUMBER,
+        p_decision IN VARCHAR2,
+        p_comments IN VARCHAR2 DEFAULT NULL
+    ) AS
+        v_workflow_id requests.workflow_id%TYPE;
+        v_current_stage requests.current_stage%TYPE;
+        v_old_status requests.status%TYPE;
+        v_next_stage workflow_stages.stage_id%TYPE;
+        v_next_stage_name workflow_stages.stage_name%TYPE;
+        v_new_status requests.status%TYPE;
+        v_required_level workflow_stages.required_level%TYPE;
+        v_decider_level roles.role_level%TYPE;
+        v_current_dept_id department.dept_id%TYPE;
+        v_decider_dept_id department.dept_id%TYPE;
+    BEGIN
+        SELECT workflow_id, current_stage, status
+        INTO v_workflow_id, v_current_stage, v_old_status
+        FROM requests
+        WHERE request_id = p_request_id
+        FOR UPDATE;
+
+        IF v_old_status IN ('REJECTED', 'COMPLETED', 'CANCELLED') THEN
+            RAISE_APPLICATION_ERROR(-20004,
+                'Request ' || p_request_id || ' is already ' || v_old_status);
+        END IF;
+
+        SELECT ws.required_level, r.role_level. ws.dept_id, e.dept_id
+        INTO v_required_level, v_decider_level, v_current_dept_id, v_decider_dept_id
+        FROM workflow_stages ws
+        JOIN employees e ON e.emp_id = p_decider_id
+        JOIN roles r ON r.role_id = e.role_id
+        WHERE ws.stage_id = v_current_stage;
+
+        IF v_decider_level < v_required_level THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'Decider role level ' || v_decider_level ||
+                ' insufficient for stage requiring level ' || v_required_level);
+        END IF;
+
+        IF v_current_dept_id != v_decider_dept_id THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'The decider is not part of nor responsible for department id ' || v_current_dept_id || ' and therefore is not authorized to make a decision on this stage of the request');
+        END IF;
+
+        INSERT INTO decisions (
+            request_id, stage_id, decider_id, decision, comments
+        ) VALUES (
+            p_request_id, v_current_stage, p_decider_id, p_decision, p_comments
+        );
+
+        IF p_decision = 'APPROVED' THEN
+            v_next_stage := get_next_stage(v_workflow_id, v_current_stage);
+
+            IF v_next_stage IS NULL THEN
+                v_new_status := 'COMPLETED';
+                UPDATE requests
+                SET    status = v_new_status,
+                       current_stage = NULL,
+                       resolved_at = SYSTIMESTAMP
+                WHERE  request_id = p_request_id;
+            ELSE
+                SELECT stage_name
+                INTO v_next_stage_name
+                FROM workflow_stages
+                WHERE stage_id = v_next_stage;
+
+                IF v_next_stage_name = 'Implementation' THEN
+                    v_new_status := 'APPROVED';
+                    UPDATE requests
+                    SET status = v_new_status,
+                        current_stage = v_next_stage
+                    WHERE  request_id = p_request_id;
+                ELSE
+                    v_new_status := 'IN_REVIEW';
+                    UPDATE requests
+                    SET status = v_new_status,
+                        current_stage = v_next_stage
+                    WHERE  request_id = p_request_id;
+                END IF;
+            END IF;
+
+        ELSIF p_decision = 'REJECTED' THEN
+            v_new_status := 'REJECTED';
+            UPDATE requests
+            SET status = v_new_status, 
+                current_stage = NULL, 
+                resolved_at = SYSTIMESTAMP
+            WHERE request_id = p_request_id;
+        END IF;
+
+        log_audit(
+            p_table_name => 'REQUESTS',
+            p_record_id => p_request_id,
+            p_action => 'UPDATE',
+            p_changed_by => p_decider_id,
+            p_old_value => 'status=' || v_old_status,
+            p_new_value => 'status=' || v_new_status
+        );
+
+        COMMIT;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END decide_stage;
+
+    ------------------------------------------------------------------ escalate_overdue requests
+    PROCEDURE escalate_overdue AS
+        CURSOR c_overdue IS
+            SELECT r.request_id, r.submitted_at, w.sla_hours, r.status
+            FROM requests  r
+            JOIN workflows w ON w.workflow_id = r.workflow_id
+            WHERE r.status IN ('PENDING', 'IN_REVIEW', 'APPROVED', 'IN_PROGRESS')
+            AND r.submitted_at + (w.sla_hours / 24) < SYSTIMESTAMP;
+
+        v_count NUMBER := 0;
+        v_old_status requests.status%TYPE;
+    BEGIN
+        FOR rec IN c_overdue LOOP
+            v_old_status := rec.status;
+
+            UPDATE requests
+            SET status = 'ESCALATED'
+            WHERE request_id = rec.request_id;
+
+            log_audit(
+                p_table_name => 'REQUESTS',
+                p_record_id => rec.request_id,
+                p_action => 'UPDATE',
+                p_changed_by => NULL,
+                p_old_value => v_old_status,
+                p_new_value => 'status=ESCALATED'
+            );
+
+            v_count := v_count + 1;
+        END LOOP;
+
+        COMMIT;
+        DBMS_OUTPUT.PUT_LINE('Escalated ' || v_count || ' overdue requests.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END escalate_overdue;
+
+    ------------------------------------------------------------------------------ get_sla_status
+    FUNCTION get_sla_status (p_request_id IN NUMBER) RETURN VARCHAR2 AS
+        v_submitted TIMESTAMP;
+        v_sla_hours NUMBER;
+        v_hours_used NUMBER;
+        v_pct NUMBER;
+    BEGIN
+        SELECT r.submitted_at, w.sla_hours
+        INTO v_submitted, v_sla_hours
+        FROM requests  r
+        JOIN workflows w ON w.workflow_id = r.workflow_id
+        WHERE r.request_id = p_request_id;
+
+        v_hours_used := EXTRACT(DAY    FROM (SYSTIMESTAMP - v_submitted)) * 24 
+                        + EXTRACT(HOUR   FROM (SYSTIMESTAMP - v_submitted))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - v_submitted)) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - v_submitted)) / 3600;
+
+        v_pct := (v_hours_used / v_sla_hours) * 100;
+
+        IF v_pct < 70 THEN 
+            RETURN 'ON_TRACK';
+        ELSIF v_pct < 100 THEN 
+            RETURN 'AT_RISK';
+        ELSE                   
+            RETURN 'BREACHED';
+        END IF;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20006,
+                'Request ' || p_request_id || ' not found.');
+    END get_sla_status;
+
+END workflow_pkg;
+----------------------------------------------------------------------------------------------------------------------------------
+create or replace PACKAGE BODY workflow_pkg AS
+
+    
+    --------------------------------------------------------- get the first stage_id for a workflow
+    FUNCTION get_first_stage (p_workflow_id IN NUMBER) RETURN NUMBER AS
+        v_stage_id workflow_stages.stage_id%TYPE;
+    BEGIN
+        SELECT stage_id
+        INTO v_stage_id
+        FROM workflow_stages
+        WHERE workflow_id = p_workflow_id
+        AND stage_seq   = (
+                   SELECT MIN(stage_seq)
+                   FROM   workflow_stages
+                   WHERE  workflow_id = p_workflow_id
+               );
+        RETURN v_stage_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20001,
+                'No stages defined for workflow_id ' || p_workflow_id);
+    END get_first_stage;
+
+
+    ----------------------------- get the next stage_id after the current one for the specific workflow
+    FUNCTION get_next_stage (
+        p_workflow_id IN NUMBER,
+        p_current_stage_id IN NUMBER
+    ) RETURN NUMBER AS
+        v_current_seq workflow_stages.stage_seq%TYPE;
+        v_next_stage workflow_stages.stage_id%TYPE;
+    BEGIN
+        SELECT stage_seq INTO v_current_seq
+        FROM workflow_stages
+        WHERE stage_id = p_current_stage_id;
+
+        SELECT stage_id INTO v_next_stage
+        FROM workflow_stages
+        WHERE workflow_id = p_workflow_id
+        AND stage_seq = (
+                   SELECT MIN(stage_seq)
+                   FROM workflow_stages
+                   WHERE workflow_id  = p_workflow_id
+                   AND stage_seq    > v_current_seq
+               );
+        RETURN v_next_stage;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN NULL;
+    END get_next_stage;
+
+
+    ------------------------------------------------------------------- submit_request
+    FUNCTION submit_request (
+        p_emp_id IN NUMBER,
+        p_workflow_id IN NUMBER,
+        p_notes IN VARCHAR2 DEFAULT NULL
+    ) RETURN NUMBER AS
+        v_request_id  requests.request_id%TYPE;
+        v_first_stage requests.current_stage%TYPE;
+    BEGIN
+        DECLARE
+            v_check NUMBER;
+        BEGIN
+            SELECT 1 INTO v_check
+            FROM employees
+            WHERE emp_id = p_emp_id AND is_active = 1;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20002,
+                    'Employee ' || p_emp_id || ' not found or inactive.');
+        END;
+
+        DECLARE
+            v_check NUMBER;
+        BEGIN
+            SELECT 1 INTO v_check
+            FROM workflows
+            WHERE workflow_id = p_workflow_id AND is_active = 1;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20003,
+                    'Workflow ' || p_workflow_id || ' not found or inactive.');
+        END;
+
+        v_first_stage := get_first_stage(p_workflow_id);
+
+        INSERT INTO requests (
+            workflow_id, submitted_by, current_stage, status, notes
+        ) VALUES (
+            p_workflow_id, p_emp_id, v_first_stage, 'PENDING', p_notes
+        )
+        RETURNING request_id INTO v_request_id;
+
+        log_audit(
+            p_table_name => 'REQUESTS',
+            p_record_id => v_request_id,
+            p_action => 'INSERT',
+            p_changed_by => p_emp_id,
+            p_new_value => 'status=PENDING, stage=' || v_first_stage
+        );
+
+        COMMIT;
+        RETURN v_request_id;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END submit_request;
+
+    ----------------------------------------------------------------------- decide_stage
+    PROCEDURE decide_stage (
+        p_request_id IN NUMBER,
+        p_decider_id IN NUMBER,
+        p_decision IN VARCHAR2,
+        p_comments IN VARCHAR2 DEFAULT NULL
+    ) AS
+        v_workflow_id requests.workflow_id%TYPE;
+        v_current_stage requests.current_stage%TYPE;
+        v_old_status requests.status%TYPE;
+        v_next_stage workflow_stages.stage_id%TYPE;
+        v_next_stage_name workflow_stages.stage_name%TYPE;
+        v_new_status requests.status%TYPE;
+        v_required_level workflow_stages.required_level%TYPE;
+        v_decider_level roles.role_level%TYPE;
+        v_current_dept_id departments.dept_id%TYPE;
+        v_decider_dept_id departments.dept_id%TYPE;
+    BEGIN
+        SELECT workflow_id, current_stage, status
+        INTO v_workflow_id, v_current_stage, v_old_status
+        FROM requests
+        WHERE request_id = p_request_id
+        FOR UPDATE;
+
+        IF v_old_status IN ('REJECTED', 'COMPLETED', 'CANCELLED') THEN
+            RAISE_APPLICATION_ERROR(-20004,
+                'Request ' || p_request_id || ' is already ' || v_old_status);
+        END IF;
+
+        SELECT ws.required_level, r.role_level. ws.dept_id, e.dept_id
+        INTO v_required_level, v_decider_level, v_current_dept_id, v_decider_dept_id
+        FROM workflow_stages ws
+        JOIN employees e ON e.emp_id = p_decider_id
+        JOIN roles r ON r.role_id = e.role_id
+        WHERE ws.stage_id = v_current_stage;
+
+        IF v_decider_level < v_required_level THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'Decider role level ' || v_decider_level ||
+                ' insufficient for stage requiring level ' || v_required_level);
+        END IF;
+
+        IF v_current_dept_id != v_decider_dept_id THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'The decider is not part of nor responsible for department id ' || v_current_dept_id || ' and therefore is not authorized to make a decision on this stage of the request');
+        END IF;
+
+        INSERT INTO decisions (
+            request_id, stage_id, decider_id, decision, comments
+        ) VALUES (
+            p_request_id, v_current_stage, p_decider_id, p_decision, p_comments
+        );
+
+        IF p_decision = 'APPROVED' THEN
+            v_next_stage := get_next_stage(v_workflow_id, v_current_stage);
+
+            IF v_next_stage IS NULL THEN
+                v_new_status := 'COMPLETED';
+                UPDATE requests
+                SET    status = v_new_status,
+                       current_stage = NULL,
+                       resolved_at = SYSTIMESTAMP
+                WHERE  request_id = p_request_id;
+            ELSE
+                SELECT stage_name
+                INTO v_next_stage_name
+                FROM workflow_stages
+                WHERE stage_id = v_next_stage;
+
+                IF v_next_stage_name = 'Implementation' THEN
+                    v_new_status := 'APPROVED';
+                    UPDATE requests
+                    SET status = v_new_status,
+                        current_stage = v_next_stage
+                    WHERE  request_id = p_request_id;
+                ELSE
+                    v_new_status := 'IN_REVIEW';
+                    UPDATE requests
+                    SET status = v_new_status,
+                        current_stage = v_next_stage
+                    WHERE  request_id = p_request_id;
+                END IF;
+            END IF;
+
+        ELSIF p_decision = 'REJECTED' THEN
+            v_new_status := 'REJECTED';
+            UPDATE requests
+            SET status = v_new_status, 
+                current_stage = NULL, 
+                resolved_at = SYSTIMESTAMP
+            WHERE request_id = p_request_id;
+        END IF;
+
+        log_audit(
+            p_table_name => 'REQUESTS',
+            p_record_id => p_request_id,
+            p_action => 'UPDATE',
+            p_changed_by => p_decider_id,
+            p_old_value => 'status=' || v_old_status,
+            p_new_value => 'status=' || v_new_status
+        );
+
+        COMMIT;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END decide_stage;
+
+    ------------------------------------------------------------------ escalate_overdue requests
+    PROCEDURE escalate_overdue AS
+        CURSOR c_overdue IS
+            SELECT r.request_id, r.submitted_at, w.sla_hours, r.status
+            FROM requests  r
+            JOIN workflows w ON w.workflow_id = r.workflow_id
+            WHERE r.status IN ('PENDING', 'IN_REVIEW', 'APPROVED', 'IN_PROGRESS')
+            AND r.submitted_at + (w.sla_hours / 24) < SYSTIMESTAMP;
+
+        v_count NUMBER := 0;
+        v_old_status requests.status%TYPE;
+    BEGIN
+        FOR rec IN c_overdue LOOP
+            v_old_status := rec.status;
+
+            UPDATE requests
+            SET status = 'ESCALATED'
+            WHERE request_id = rec.request_id;
+
+            log_audit(
+                p_table_name => 'REQUESTS',
+                p_record_id => rec.request_id,
+                p_action => 'UPDATE',
+                p_changed_by => NULL,
+                p_old_value => v_old_status,
+                p_new_value => 'status=ESCALATED'
+            );
+
+            v_count := v_count + 1;
+        END LOOP;
+
+        COMMIT;
+        DBMS_OUTPUT.PUT_LINE('Escalated ' || v_count || ' overdue requests.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END escalate_overdue;
+
+    ------------------------------------------------------------------------------ get_sla_status
+    FUNCTION get_sla_status (p_request_id IN NUMBER) RETURN VARCHAR2 AS
+        v_submitted TIMESTAMP;
+        v_sla_hours NUMBER;
+        v_hours_used NUMBER;
+        v_pct NUMBER;
+    BEGIN
+        SELECT r.submitted_at, w.sla_hours
+        INTO v_submitted, v_sla_hours
+        FROM requests  r
+        JOIN workflows w ON w.workflow_id = r.workflow_id
+        WHERE r.request_id = p_request_id;
+
+        v_hours_used := EXTRACT(DAY    FROM (SYSTIMESTAMP - v_submitted)) * 24 
+                        + EXTRACT(HOUR   FROM (SYSTIMESTAMP - v_submitted))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - v_submitted)) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - v_submitted)) / 3600;
+
+        v_pct := (v_hours_used / v_sla_hours) * 100;
+
+        IF v_pct < 70 THEN 
+            RETURN 'ON_TRACK';
+        ELSIF v_pct < 100 THEN 
+            RETURN 'AT_RISK';
+        ELSE                   
+            RETURN 'BREACHED';
+        END IF;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20006,
+                'Request ' || p_request_id || ' not found.');
+    END get_sla_status;
+
+END workflow_pkg;
+----------------------------------------------------------------------------------------------------------------------------------
+create or replace PACKAGE BODY workflow_pkg AS
+
+    
+    --------------------------------------------------------- get the first stage_id for a workflow
+    FUNCTION get_first_stage (p_workflow_id IN NUMBER) RETURN NUMBER AS
+        v_stage_id workflow_stages.stage_id%TYPE;
+    BEGIN
+        SELECT stage_id
+        INTO v_stage_id
+        FROM workflow_stages
+        WHERE workflow_id = p_workflow_id
+        AND stage_seq   = (
+                   SELECT MIN(stage_seq)
+                   FROM   workflow_stages
+                   WHERE  workflow_id = p_workflow_id
+               );
+        RETURN v_stage_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20001,
+                'No stages defined for workflow_id ' || p_workflow_id);
+    END get_first_stage;
+
+
+    ----------------------------- get the next stage_id after the current one for the specific workflow
+    FUNCTION get_next_stage (
+        p_workflow_id IN NUMBER,
+        p_current_stage_id IN NUMBER
+    ) RETURN NUMBER AS
+        v_current_seq workflow_stages.stage_seq%TYPE;
+        v_next_stage workflow_stages.stage_id%TYPE;
+    BEGIN
+        SELECT stage_seq INTO v_current_seq
+        FROM workflow_stages
+        WHERE stage_id = p_current_stage_id;
+
+        SELECT stage_id INTO v_next_stage
+        FROM workflow_stages
+        WHERE workflow_id = p_workflow_id
+        AND stage_seq = (
+                   SELECT MIN(stage_seq)
+                   FROM workflow_stages
+                   WHERE workflow_id  = p_workflow_id
+                   AND stage_seq    > v_current_seq
+               );
+        RETURN v_next_stage;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN NULL;
+    END get_next_stage;
+
+
+    ------------------------------------------------------------------- submit_request
+    FUNCTION submit_request (
+        p_emp_id IN NUMBER,
+        p_workflow_id IN NUMBER,
+        p_notes IN VARCHAR2 DEFAULT NULL
+    ) RETURN NUMBER AS
+        v_request_id  requests.request_id%TYPE;
+        v_first_stage requests.current_stage%TYPE;
+    BEGIN
+        DECLARE
+            v_check NUMBER;
+        BEGIN
+            SELECT 1 INTO v_check
+            FROM employees
+            WHERE emp_id = p_emp_id AND is_active = 1;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20002,
+                    'Employee ' || p_emp_id || ' not found or inactive.');
+        END;
+
+        DECLARE
+            v_check NUMBER;
+        BEGIN
+            SELECT 1 INTO v_check
+            FROM workflows
+            WHERE workflow_id = p_workflow_id AND is_active = 1;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20003,
+                    'Workflow ' || p_workflow_id || ' not found or inactive.');
+        END;
+
+        v_first_stage := get_first_stage(p_workflow_id);
+
+        INSERT INTO requests (
+            workflow_id, submitted_by, current_stage, status, notes
+        ) VALUES (
+            p_workflow_id, p_emp_id, v_first_stage, 'PENDING', p_notes
+        )
+        RETURNING request_id INTO v_request_id;
+
+        log_audit(
+            p_table_name => 'REQUESTS',
+            p_record_id => v_request_id,
+            p_action => 'INSERT',
+            p_changed_by => p_emp_id,
+            p_new_value => 'status=PENDING, stage=' || v_first_stage
+        );
+
+        COMMIT;
+        RETURN v_request_id;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END submit_request;
+
+    ----------------------------------------------------------------------- decide_stage
+    PROCEDURE decide_stage (
+        p_request_id IN NUMBER,
+        p_decider_id IN NUMBER,
+        p_decision IN VARCHAR2,
+        p_comments IN VARCHAR2 DEFAULT NULL
+    ) AS
+        v_workflow_id requests.workflow_id%TYPE;
+        v_current_stage requests.current_stage%TYPE;
+        v_old_status requests.status%TYPE;
+        v_next_stage workflow_stages.stage_id%TYPE;
+        v_next_stage_name workflow_stages.stage_name%TYPE;
+        v_new_status requests.status%TYPE;
+        v_required_level workflow_stages.required_level%TYPE;
+        v_decider_level roles.role_level%TYPE;
+        v_current_dept_id departments.dept_id%TYPE;
+        v_decider_dept_id departments.dept_id%TYPE;
+    BEGIN
+        SELECT workflow_id, current_stage, status
+        INTO v_workflow_id, v_current_stage, v_old_status
+        FROM requests
+        WHERE request_id = p_request_id
+        FOR UPDATE;
+
+        IF v_old_status IN ('REJECTED', 'COMPLETED', 'CANCELLED') THEN
+            RAISE_APPLICATION_ERROR(-20004,
+                'Request ' || p_request_id || ' is already ' || v_old_status);
+        END IF;
+
+        SELECT ws.required_level, r.role_level, ws.dept_id, e.dept_id
+        INTO v_required_level, v_decider_level, v_current_dept_id, v_decider_dept_id
+        FROM workflow_stages ws
+        JOIN employees e ON e.emp_id = p_decider_id
+        JOIN roles r ON r.role_id = e.role_id
+        WHERE ws.stage_id = v_current_stage;
+
+        IF v_decider_level < v_required_level THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'Decider role level ' || v_decider_level ||
+                ' insufficient for stage requiring level ' || v_required_level);
+        END IF;
+
+        IF v_current_dept_id != v_decider_dept_id THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'The decider is not part of nor responsible for department id ' || v_current_dept_id || ' and therefore is not authorized to make a decision on this stage of the request');
+        END IF;
+
+        INSERT INTO decisions (
+            request_id, stage_id, decider_id, decision, comments
+        ) VALUES (
+            p_request_id, v_current_stage, p_decider_id, p_decision, p_comments
+        );
+
+        IF p_decision = 'APPROVED' THEN
+            v_next_stage := get_next_stage(v_workflow_id, v_current_stage);
+
+            IF v_next_stage IS NULL THEN
+                v_new_status := 'COMPLETED';
+                UPDATE requests
+                SET    status = v_new_status,
+                       current_stage = NULL,
+                       resolved_at = SYSTIMESTAMP
+                WHERE  request_id = p_request_id;
+            ELSE
+                SELECT stage_name
+                INTO v_next_stage_name
+                FROM workflow_stages
+                WHERE stage_id = v_next_stage;
+
+                IF v_next_stage_name = 'Implementation' THEN
+                    v_new_status := 'APPROVED';
+                    UPDATE requests
+                    SET status = v_new_status,
+                        current_stage = v_next_stage
+                    WHERE  request_id = p_request_id;
+                ELSE
+                    v_new_status := 'IN_REVIEW';
+                    UPDATE requests
+                    SET status = v_new_status,
+                        current_stage = v_next_stage
+                    WHERE  request_id = p_request_id;
+                END IF;
+            END IF;
+
+        ELSIF p_decision = 'REJECTED' THEN
+            v_new_status := 'REJECTED';
+            UPDATE requests
+            SET status = v_new_status, 
+                current_stage = NULL, 
+                resolved_at = SYSTIMESTAMP
+            WHERE request_id = p_request_id;
+        END IF;
+
+        log_audit(
+            p_table_name => 'REQUESTS',
+            p_record_id => p_request_id,
+            p_action => 'UPDATE',
+            p_changed_by => p_decider_id,
+            p_old_value => 'status=' || v_old_status,
+            p_new_value => 'status=' || v_new_status
+        );
+
+        COMMIT;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END decide_stage;
+
+    ------------------------------------------------------------------ escalate_overdue requests
+    PROCEDURE escalate_overdue AS
+        CURSOR c_overdue IS
+            SELECT r.request_id, r.submitted_at, w.sla_hours, r.status
+            FROM requests  r
+            JOIN workflows w ON w.workflow_id = r.workflow_id
+            WHERE r.status IN ('PENDING', 'IN_REVIEW', 'APPROVED', 'IN_PROGRESS')
+            AND r.submitted_at + (w.sla_hours / 24) < SYSTIMESTAMP;
+
+        v_count NUMBER := 0;
+        v_old_status requests.status%TYPE;
+    BEGIN
+        FOR rec IN c_overdue LOOP
+            v_old_status := rec.status;
+
+            UPDATE requests
+            SET status = 'ESCALATED'
+            WHERE request_id = rec.request_id;
+
+            log_audit(
+                p_table_name => 'REQUESTS',
+                p_record_id => rec.request_id,
+                p_action => 'UPDATE',
+                p_changed_by => NULL,
+                p_old_value => v_old_status,
+                p_new_value => 'status=ESCALATED'
+            );
+
+            v_count := v_count + 1;
+        END LOOP;
+
+        COMMIT;
+        DBMS_OUTPUT.PUT_LINE('Escalated ' || v_count || ' overdue requests.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END escalate_overdue;
+
+    ------------------------------------------------------------------------------ get_sla_status
+    FUNCTION get_sla_status (p_request_id IN NUMBER) RETURN VARCHAR2 AS
+        v_submitted TIMESTAMP;
+        v_sla_hours NUMBER;
+        v_hours_used NUMBER;
+        v_pct NUMBER;
+    BEGIN
+        SELECT r.submitted_at, w.sla_hours
+        INTO v_submitted, v_sla_hours
+        FROM requests  r
+        JOIN workflows w ON w.workflow_id = r.workflow_id
+        WHERE r.request_id = p_request_id;
+
+        v_hours_used := EXTRACT(DAY    FROM (SYSTIMESTAMP - v_submitted)) * 24 
+                        + EXTRACT(HOUR   FROM (SYSTIMESTAMP - v_submitted))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - v_submitted)) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - v_submitted)) / 3600;
+
+        v_pct := (v_hours_used / v_sla_hours) * 100;
+
+        IF v_pct < 70 THEN 
+            RETURN 'ON_TRACK';
+        ELSIF v_pct < 100 THEN 
+            RETURN 'AT_RISK';
+        ELSE                   
+            RETURN 'BREACHED';
+        END IF;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20006,
+                'Request ' || p_request_id || ' not found.');
+    END get_sla_status;
+
+END workflow_pkg;
+----------------------------------------------------------------------------------------------------------------------------------
+BEGIN
+    workflow_pkg.decide_stage(
+        p_request_id => 1,
+        p_decider_id => 1,
+        p_decision   => 'APPROVED',
+        p_comments   => 'Approved, coverage arranged.'
+    );
+END;
+/
+----------------------------------------------------------------------------------------------------------------------------------
+BEGIN
+    workflow_pkg.decide_stage(
+        p_request_id => 1,
+        p_decider_id => 6,
+        p_decision   => 'APPROVED',
+        p_comments   => 'Approved, coverage arranged.'
+    );
+END;
+/
+----------------------------------------------------------------------------------------------------------------------------------
+BEGIN
+    workflow_pkg.decide_stage(
+        p_request_id => 1,
+        p_decider_id => 8,
+        p_decision   => 'APPROVED',
+        p_comments   => 'Approved, coverage arranged.'
+    );
+END;
+/
+----------------------------------------------------------------------------------------------------------------------------------
+BEGIN
+    workflow_pkg.decide_stage(
+        p_request_id => 1,
+        p_decider_id => 3,
+        p_decision   => 'APPROVED',
+        p_comments   => 'Approved, coverage arranged.'
+    );
+END;
+/
+----------------------------------------------------------------------------------------------------------------------------------
+DECLARE
+    v_id NUMBER;
+BEGIN
+    v_id := incident_pkg.log_incident(
+        p_dept_id => 22,
+        p_reported_by => 13,
+        p_title => 'Email server unresponsive',
+        p_severity => 'HIGH'
+    );
+    DBMS_OUTPUT.PUT_LINE('Created incident_id: ' || v_id);
+END;
+/
+----------------------------------------------------------------------------------------------------------------------------------
+create or replace PACKAGE BODY incident_pkg AS
+
+    FUNCTION log_incident (
+        p_dept_id     IN NUMBER,
+        p_reported_by IN NUMBER,
+        p_title       IN VARCHAR2,
+        p_severity    IN VARCHAR2,
+        p_description IN VARCHAR2 DEFAULT NULL
+    ) RETURN NUMBER AS
+        v_incident_id incidents.incident_id%TYPE;
+    BEGIN
+        INSERT INTO incidents (
+            dept_id, reported_by, title, severity, description, status
+        ) VALUES (
+            p_dept_id, p_reported_by, p_title, p_severity, p_description, 'OPEN'
+        )
+        RETURNING incident_id INTO v_incident_id;
+
+        log_audit('INCIDENTS', v_incident_id, 'INSERT', p_reported_by,
+                  NULL, 'severity=' || p_severity || ', status=OPEN');
+
+        auto_assign(v_incident_id);
+
+        COMMIT;
+        RETURN v_incident_id;
+    EXCEPTION
+        WHEN OTHERS THEN ROLLBACK; RAISE;
+    END log_incident;
+
+    PROCEDURE auto_assign (p_incident_id IN NUMBER) AS
+        v_dept_id incidents.dept_id%TYPE;
+        v_assignee employees.emp_id%TYPE;
+        v_ops_manager_id NUMBER := 23;
+    BEGIN
+        SELECT dept_id 
+        INTO v_dept_id
+        FROM incidents 
+        WHERE incident_id = p_incident_id;
+
+        SELECT e.emp_id 
+        INTO v_assignee
+        FROM employees e
+        WHERE e.dept_id = v_dept_id
+        AND e.role_id = v_ops_manager_id
+        AND e.is_active = 1;
+
+        UPDATE incidents
+        SET assigned_to = v_assignee,
+            status = 'IN_PROGRESS'
+        WHERE incident_id = p_incident_id;
+
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            NULL;
+    END auto_assign;
+
+    PROCEDURE resolve_incident (
+        p_incident_id IN NUMBER,
+        p_resolved_by IN NUMBER,
+        p_resolution  IN VARCHAR2
+    ) AS
+        v_reported_at incidents.reported_at%TYPE;
+        v_old_status incidents.status%TYPE;
+        v_minutes NUMBER;
+    BEGIN
+        SELECT reported_at, status
+        INTO v_reported_at, v_old_status
+        FROM incidents
+        WHERE incident_id = p_incident_id
+        FOR UPDATE;
+
+        IF v_old_status = 'RESOLVED' THEN
+            RAISE_APPLICATION_ERROR(-20010,
+                'Incident ' || p_incident_id || ' is already resolved.');
+        END IF;
+
+        v_minutes := ROUND( EXTRACT(DAY FROM (SYSTIMESTAMP - v_reported_at)) * 1440
+                        + EXTRACT(HOUR FROM (SYSTIMESTAMP - v_reported_at)) * 60
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - v_reported_at))
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - v_reported_at)) / 60
+                    );
+
+        UPDATE incidents
+        SET status = 'RESOLVED',
+            resolved_at = SYSTIMESTAMP,
+            resolution_min = v_minutes,
+            description = description || CHR(10) || 'RESOLUTION: ' || p_resolution
+        WHERE incident_id = p_incident_id;
+
+        log_audit('INCIDENTS', p_incident_id, 'UPDATE', p_resolved_by,
+                  'status=' || v_old_status,
+                  'status=RESOLVED, resolution_min=' || v_minutes);
+
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN ROLLBACK; RAISE;
+    END resolve_incident;
+
+END incident_pkg;
+----------------------------------------------------------------------------------------------------------------------------------
+BEGIN
+    reporting_pkg.take_kpi_snapshot;
+END;
+/
+SELECT * FROM kpi_logs;
+----------------------------------------------------------------------------------------------------------------------------------
+-- since we havent seeded budget yet
+create or replace PACKAGE BODY reporting_pkg AS
+    PROCEDURE take_kpi_snapshot AS
+        CURSOR c_depts IS 
+            SELECT dept_id 
+            FROM departments;
+            
+        v_open_inc NUMBER;
+        v_resolved NUMBER;
+        v_avg_res_h NUMBER;
+        v_open_req NUMBER;
+        v_breaches NUMBER;
+        v_budget_pct NUMBER;
+    BEGIN
+        FOR dept IN c_depts LOOP
+            SELECT COUNT(*) 
+            INTO v_open_inc
+            FROM incidents
+            WHERE dept_id = dept.dept_id
+            AND status IN ('OPEN','IN_PROGRESS');
+
+            SELECT COUNT(*) 
+            INTO v_resolved
+            FROM incidents
+            WHERE dept_id = dept.dept_id
+            AND status = 'RESOLVED'
+            AND TRUNC(resolved_at) = TRUNC(SYSDATE);
+
+            SELECT ROUND(AVG(resolution_min) / 60, 2)
+            INTO v_avg_res_h
+            FROM incidents
+            WHERE dept_id = dept.dept_id
+            AND resolution_min IS NOT NULL;
+
+            SELECT COUNT(*) 
+            INTO v_open_req
+            FROM requests r
+            JOIN employees e ON e.emp_id = r.submitted_by
+            WHERE e.dept_id  = dept.dept_id
+            AND r.status NOT IN ('COMPLETED','CANCELLED','REJECTED');
+
+            SELECT COUNT(*) 
+            INTO v_breaches
+            FROM requests r
+            JOIN workflows w ON w.workflow_id = r.workflow_id
+            JOIN employees e ON e.emp_id = r.submitted_by
+            WHERE e.dept_id = dept.dept_id
+            AND r.status  = 'ESCALATED'
+            AND TRUNC(r.submitted_at, 'MM') = TRUNC(SYSDATE, 'MM');
+
+            SELECT ROUND((spent / NULLIF(allocated,0)) * 100, 2)
+            INTO v_budget_pct
+            FROM budgets
+            WHERE dept_id = dept.dept_id
+            AND fiscal_year = TO_NUMBER(TO_CHAR(SYSDATE,'YYYY'));
+
+            -- Upsert — update today's snapshot if it exists, else insert
+            MERGE INTO kpi_logs k
+            USING (SELECT dept.dept_id AS dept_id, TRUNC(SYSDATE) AS snap_date
+                   FROM dual) src
+            ON (k.dept_id = src.dept_id AND k.snapshot_date = src.snap_date)
+            WHEN MATCHED THEN UPDATE SET
+                open_incidents  = v_open_inc,
+                resolved_today  = v_resolved,
+                avg_resolution_h = v_avg_res_h,
+                open_requests   = v_open_req,
+                sla_breaches    = v_breaches,
+                budget_pct_used = v_budget_pct
+            WHEN NOT MATCHED THEN INSERT (
+                dept_id, snapshot_date, open_incidents, resolved_today,
+                avg_resolution_h, open_requests, sla_breaches, budget_pct_used
+            ) VALUES (
+                dept.dept_id, TRUNC(SYSDATE), v_open_inc, v_resolved,
+                v_avg_res_h, v_open_req, v_breaches, v_budget_pct
+            );
+
+        END LOOP;
+        COMMIT;
+    END take_kpi_snapshot;
+
+    ------------------------------------------------------------------ rank departments by efficiency
+    FUNCTION dept_efficiency_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                d.dept_name,
+                COUNT(DISTINCT i.incident_id) AS total_incidents,
+                ROUND(AVG(i.resolution_min) / 60, 2) AS avg_resolution_h,
+                COUNT(CASE WHEN i.status IN ('OPEN','IN_PROGRESS') THEN 1 END) AS open_incidents,
+                
+                RANK() OVER (
+                    ORDER BY AVG(i.resolution_min) ASC NULLS LAST
+                ) AS efficiency_rank,
+
+                ROUND(
+                    AVG(i.resolution_min) - AVG(AVG(i.resolution_min))
+                        OVER (), 2
+                ) AS vs_company_avg_min
+            FROM departments d
+            LEFT JOIN incidents i ON i.dept_id = d.dept_id
+            GROUP BY d.dept_id, d.dept_name
+            ORDER BY efficiency_rank;
+
+        RETURN v_cur;
+    END dept_efficiency_report;
+
+    ------------------------------------------------------------------- employee workload within dept
+    FUNCTION employee_workload_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                d.dept_name,
+                e.first_name || ' ' || e.last_name   AS employee_name,
+                COUNT(t.task_id) AS active_tasks,
+                
+                DENSE_RANK() OVER (
+                    PARTITION BY e.dept_id
+                    ORDER BY COUNT(t.task_id) DESC
+                ) AS dept_workload_rank,
+                
+                ROUND(
+                    COUNT(t.task_id) * 100.0 /
+                    NULLIF(SUM(COUNT(t.task_id)) OVER (PARTITION BY e.dept_id), 0),
+                2) AS pct_of_dept_load
+            FROM employees e
+            JOIN departments d ON d.dept_id = e.dept_id
+            LEFT JOIN tasks  t ON t.assigned_to = e.emp_id
+            AND t.status IN ('OPEN','IN_PROGRESS')
+            WHERE e.is_active = 1
+            GROUP BY e.emp_id, e.first_name, e.last_name, e.dept_id, d.dept_name
+            ORDER BY d.dept_name, dept_workload_rank;
+
+        RETURN v_cur;
+    END employee_workload_report;
+
+    -------------------------------------- Incident trend: weekly counts for last 8 weeks by severity
+    FUNCTION incident_trend_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                TRUNC(reported_at, 'IW') AS week_start,
+                severity,
+                COUNT(*) AS incident_count,
+                
+                SUM(COUNT(*)) OVER (
+                    PARTITION BY severity
+                    ORDER BY TRUNC(reported_at, 'IW')
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+                ) AS running_total
+            FROM incidents
+            WHERE reported_at >= SYSDATE - 56
+            GROUP BY TRUNC(reported_at, 'IW'), severity
+            ORDER BY week_start, severity;
+
+        RETURN v_cur;
+    END incident_trend_report;
+
+END reporting_pkg;
+----------------------------------------------------------------------------------------------------------------------------------
+BEGIN
+    reporting_pkg.take_kpi_snapshot;
+END;
+/
+SELECT * FROM kpi_logs;
+----------------------------------------------------------------------------------------------------------------------------------
+BEGIN
+    workflow_pkg.escalate_overdue;
+END;
+/
+----------------------------------------------------------------------------------------------------------------------------------
+SELECT table_name, action, old_value, new_value, changed_at
+FROM audit_logs
+ORDER BY changed_at;
+----------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (21, 2026, 600000);
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (22, 2026, 3000000);
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (23, 2026, 1500000);
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (24, 2026, 400000);
+INSERT INTO budgets (dept_id, fiscal_year, allocated) VALUES (25, 2026, 200000);
+COMMIT;
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE PROCEDURE department_spend(
+    p_dept_id NUMBER,
+    p_amount_spent NUMBER
+)
+AS
+BEGIN
+    UPDATE budgets
+    SET spent = NVL(spent, 0) + p_amount_spent
+    WHERE dept_id = p_dept_id;
+
+    IF SQL%NOTFOUND THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Department ID ' || p_dept_id || ' not found.');
+    END IF;
+END;
+----------------------------------------------------------------------------------------------------------------------------------
+create or replace PROCEDURE department_spend(
+    p_dept_id NUMBER,
+    p_amount_spent NUMBER
+)
+AS
+BEGIN
+    UPDATE budgets
+    SET spent = NVL(spent, 0) + p_amount_spent
+    WHERE dept_id = p_dept_id;
+
+    IF SQL%NOTFOUND THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Department ID ' || p_dept_id || ' not found.');
+    END IF;
+
+    COMMIT;
+END;
+----------------------------------------------------------------------------------------------------------------------------------
+DECLARE
+    v_dept_id NUMBER := 24;
+    v_amount NUMBER := 556.64;
+BEGIN
+    department_spend(v_dept_id, v_amount);
+END;
+----------------------------------------------------------------------------------------------------------------------------------
+DECLARE
+    v_dept_id NUMBER := 22;
+    v_amount NUMBER := 500.001111;
+BEGIN
+    department_spend(v_dept_id, v_amount);
+END;
+----------------------------------------------------------------------------------------------------------------------------------
+DECLARE
+    v_dept_id NUMBER := 21;
+    v_amount NUMBER := 300.004445;
+BEGIN
+    department_spend(v_dept_id, v_amount);
+END;
+----------------------------------------------------------------------------------------------------------------------------------
+DECLARE
+    v_dept_id NUMBER := 21;
+    v_amount NUMBER := 300.005;
+BEGIN
+    department_spend(v_dept_id, v_amount);
+END;
+----------------------------------------------------------------------------------------------------------------------------------
+create or replace PACKAGE BODY reporting_pkg AS
+    PROCEDURE take_kpi_snapshot AS
+        CURSOR c_depts IS 
+            SELECT dept_id 
+            FROM departments;
+            
+        v_open_inc NUMBER;
+        v_resolved NUMBER;
+        v_avg_res_h NUMBER;
+        v_open_req NUMBER;
+        v_breaches NUMBER;
+        v_budget_pct NUMBER;
+    BEGIN
+        FOR dept IN c_depts LOOP
+            SELECT COUNT(*) 
+            INTO v_open_inc
+            FROM incidents
+            WHERE dept_id = dept.dept_id
+            AND status IN ('OPEN','IN_PROGRESS');
+
+            SELECT COUNT(*) 
+            INTO v_resolved
+            FROM incidents
+            WHERE dept_id = dept.dept_id
+            AND status = 'RESOLVED'
+            AND TRUNC(resolved_at) = TRUNC(SYSDATE);
+
+            SELECT ROUND(AVG(resolution_min) / 60, 2)
+            INTO v_avg_res_h
+            FROM incidents
+            WHERE dept_id = dept.dept_id
+            AND resolution_min IS NOT NULL;
+
+            SELECT COUNT(*) 
+            INTO v_open_req
+            FROM requests r
+            JOIN employees e ON e.emp_id = r.submitted_by
+            WHERE e.dept_id  = dept.dept_id
+            AND r.status NOT IN ('COMPLETED','CANCELLED','REJECTED');
+
+            SELECT COUNT(*) 
+            INTO v_breaches
+            FROM requests r
+            JOIN workflows w ON w.workflow_id = r.workflow_id
+            JOIN employees e ON e.emp_id = r.submitted_by
+            WHERE e.dept_id = dept.dept_id
+            AND r.status  = 'ESCALATED'
+            AND TRUNC(r.submitted_at, 'MM') = TRUNC(SYSDATE, 'MM');
+
+            SELECT ROUND((spent / NULLIF(allocated,0)) * 100, 2)
+            INTO v_budget_pct
+            FROM budgets
+            WHERE dept_id = dept.dept_id
+            AND fiscal_year = TO_NUMBER(TO_CHAR(SYSDATE,'YYYY'));
+
+            -- Upsert — update today's snapshot if it exists, else insert
+            MERGE INTO kpi_logs k
+            USING (SELECT dept.dept_id AS dept_id, TRUNC(SYSDATE) AS snap_date
+                   FROM dual) src
+            ON (k.dept_id = src.dept_id AND k.snapshot_date = src.snap_date)
+            WHEN MATCHED THEN UPDATE SET
+                open_incidents  = v_open_inc,
+                resolved_today  = v_resolved,
+                avg_resolution_h = v_avg_res_h,
+                open_requests   = v_open_req,
+                sla_breaches    = v_breaches,
+                budget_pct_used = v_budget_pct
+            WHEN NOT MATCHED THEN INSERT (
+                dept_id, snapshot_date, open_incidents, resolved_today,
+                avg_resolution_h, open_requests, sla_breaches, budget_pct_used
+            ) VALUES (
+                dept.dept_id, TRUNC(SYSDATE), v_open_inc, v_resolved,
+                v_avg_res_h, v_open_req, v_breaches, v_budget_pct
+            );
+
+        END LOOP;
+        COMMIT;
+    END take_kpi_snapshot;
+
+    ------------------------------------------------------------------ rank departments by efficiency
+    FUNCTION dept_efficiency_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                d.dept_name,
+                COUNT(DISTINCT i.incident_id) AS total_incidents,
+                ROUND(AVG(i.resolution_min) / 60, 2) AS avg_resolution_h,
+                COUNT(CASE WHEN i.status IN ('OPEN','IN_PROGRESS') THEN 1 END) AS open_incidents,
+                
+                RANK() OVER (
+                    ORDER BY AVG(i.resolution_min) ASC NULLS LAST
+                ) AS efficiency_rank,
+
+                ROUND(
+                    AVG(i.resolution_min) - AVG(AVG(i.resolution_min))
+                        OVER (), 2
+                ) AS vs_company_avg_min
+            FROM departments d
+            LEFT JOIN incidents i ON i.dept_id = d.dept_id
+            GROUP BY d.dept_id, d.dept_name
+            ORDER BY efficiency_rank;
+
+        RETURN v_cur;
+    END dept_efficiency_report;
+
+    ------------------------------------------------------------------- employee workload within dept
+    FUNCTION employee_workload_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                d.dept_name,
+                e.first_name || ' ' || e.last_name   AS employee_name,
+                COUNT(t.task_id) AS active_tasks,
+                
+                DENSE_RANK() OVER (
+                    PARTITION BY e.dept_id
+                    ORDER BY COUNT(t.task_id) DESC
+                ) AS dept_workload_rank,
+                
+                ROUND(
+                    COUNT(t.task_id) * 100.0 /
+                    NULLIF(SUM(COUNT(t.task_id)) OVER (PARTITION BY e.dept_id), 0),
+                2) AS pct_of_dept_load
+            FROM employees e
+            JOIN departments d ON d.dept_id = e.dept_id
+            LEFT JOIN tasks  t ON t.assigned_to = e.emp_id
+            AND t.status IN ('OPEN','IN_PROGRESS')
+            WHERE e.is_active = 1
+            GROUP BY e.emp_id, e.first_name, e.last_name, e.dept_id, d.dept_name
+            ORDER BY d.dept_name, dept_workload_rank;
+
+        RETURN v_cur;
+    END employee_workload_report;
+
+    -------------------------------------- Incident trend: weekly counts for last 8 weeks by severity
+    FUNCTION incident_trend_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                TRUNC(reported_at, 'IW') AS week_start,
+                severity,
+                COUNT(*) AS incident_count,
+                
+                SUM(COUNT(*)) OVER (
+                    PARTITION BY severity
+                    ORDER BY TRUNC(reported_at, 'IW')
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+                ) AS running_total
+            FROM incidents
+            WHERE reported_at >= SYSDATE - 56
+            GROUP BY TRUNC(reported_at, 'IW'), severity
+            ORDER BY week_start, severity;
+
+        RETURN v_cur;
+    END incident_trend_report;
+
+END reporting_pkg;
+----------------------------------------------------------------------------------------------------------------------------------
+BEGIN
+    reporting_pkg.take_kpi_snapshot;
+END;
+/
+SELECT * FROM kpi_logs;
+----------------------------------------------------------------------------------------------------------------------------------
