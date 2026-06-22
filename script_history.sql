@@ -4692,3 +4692,294 @@ END;
 /
 SELECT * FROM kpi_logs;
 ----------------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE budgets
+DROP CONSTRAINT FK_BUDGET_DEPT
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE budgets
+ADD CONSTRAINT fk_budget_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE decisions
+DROP CONSTRAINT fk_decision_decider;
+
+ALTER TABLE decisions
+ADD CONSTRAINT fk_decision_decider FOREIGN KEY (decider_id) REFERENCES employees(emp_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE decisions
+DROP CONSTRAINT fk_decision_request;
+
+ALTER TABLE decisions
+ADD CONSTRAINT fk_decision_request FOREIGN KEY (request_id) REFERENCES requests(request_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE departments
+DROP CONSTRAINT fk_dept_manager;
+
+ALTER TABLE departments
+ADD CONSTRAINT fk_dept_manager FOREIGN KEY (manager_id) REFERENCES employees(emp_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE employees
+DROP CONSTRAINT fk_emp_dept;
+
+ALTER TABLE employees
+ADD CONSTRAINT fk_emp_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE employees
+DROP CONSTRAINT fk_emp_role;
+
+ALTER TABLE employees
+ADD CONSTRAINT fk_emp_role FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE incidents
+DROP CONSTRAINT fk_inc_assignee;
+
+ALTER TABLE incidents
+ADD CONSTRAINT fk_inc_assignee FOREIGN KEY (assigned_to) REFERENCES employees(emp_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE incidents
+DROP CONSTRAINT fk_inc_dept;
+
+ALTER TABLE incidents
+ADD CONSTRAINT fk_inc_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE incidents
+DROP CONSTRAINT fk_inc_reporter;
+
+ALTER TABLE incidents
+ADD CONSTRAINT fk_inc_reporter FOREIGN KEY (reported_by) REFERENCES employees(emp_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE kpi_logs
+DROP CONSTRAINT fk_kpi_dept;
+
+ALTER TABLE kpi_logs
+ADD CONSTRAINT fk_kpi_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE requests
+DROP CONSTRAINT fk_req_stage;
+
+ALTER TABLE requests
+ADD CONSTRAINT fk_req_stage FOREIGN KEY (current_stage) REFERENCES workflow_stages(stage_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE requests
+DROP CONSTRAINT fk_req_submitter;
+
+ALTER TABLE requests
+ADD CONSTRAINT fk_req_submitter FOREIGN KEY (submitted_by) REFERENCES employees(emp_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE requests
+DROP CONSTRAINT fk_req_workflow;
+
+ALTER TABLE requests
+ADD CONSTRAINT fk_req_workflow FOREIGN KEY (workflow_id) REFERENCES workflows(workflow_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE tasks
+DROP CONSTRAINT fk_task_assignee;
+
+ALTER TABLE tasks
+ADD CONSTRAINT fk_task_assignee FOREIGN KEY (assigned_to) REFERENCES employees(emp_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE tasks
+DROP CONSTRAINT fk_task_creator;
+
+ALTER TABLE tasks
+ADD CONSTRAINT fk_task_creator FOREIGN KEY (created_by) REFERENCES employees(emp_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE workflow_stages
+DROP CONSTRAINT fk_wfstage_workflow;
+
+ALTER TABLE workflow_stages
+ADD CONSTRAINT fk_wfstage_workflow FOREIGN KEY (workflow_id) REFERENCES workflows(workflow_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+ALTER TABLE workflow_stages
+DROP CONSTRAINT fk_wfstags_dept;
+
+ALTER TABLE workflow_stages
+ADD CONSTRAINT fk_wfstage_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id) ON DELETE CASCADE;
+--------------------------------------------------------------------------------------------------------------------
+DELETE FROM roles
+WHERE role_id = 25;
+
+COMMIT;
+--------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE TRIGGER trg_one_ops_manager_per_department
+BEFORE INSERT OR UPDATE ON "ADMIN"."EMPLOYEES"
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    IF :NEW.is_active = 1 AND :NEW.role_id = 23 THEN
+        
+        SELECT COUNT(*)
+        INTO v_count
+        FROM "ADMIN"."EMPLOYEES"
+        WHERE dept_id = :NEW.dept_id
+        AND is_active = 1
+        AND role_id = 23
+        AND emp_id != NVL(:NEW.emp_id, -1);
+
+        IF v_count > 0 THEN 
+            RAISE_APPLICATION_ERROR(-20001, 'Validation Error: This department already has an active Operations Manager.');
+        END IF;
+        
+    END IF;
+END;
+/
+--------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE TRIGGER trg_one_executive_per_department
+BEFORE INSERT OR UPDATE ON "ADMIN"."EMPLOYEES"
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    IF :NEW.is_active = 1 AND :NEW.role_id = 24 THEN
+        
+        SELECT COUNT(*)
+        INTO v_count
+        FROM "ADMIN"."EMPLOYEES"
+        WHERE dept_id = :NEW.dept_id
+        AND is_active = 1
+        AND role_id = 24
+        AND emp_id != NVL(:NEW.emp_id, -1);
+
+        IF v_count > 0 THEN 
+            RAISE_APPLICATION_ERROR(-20001, 'Validation Error: This department already has an active Operations Manager.');
+        END IF;
+        
+    END IF;
+END;
+/
+--------------------------------------------------------------------------------------------------------------------
+CREATE ROLE role_employee;
+CREATE ROLE role_supervisor;
+CREATE ROLE role_ops_manager;
+CREATE ROLE role_executive;
+--------------------------------------------------------------------------------------------------------------------
+GRANT EXECUTE ON workflow_pkg TO role_employee;
+GRANT EXECUTE ON incident_pkg TO role_employee;
+--------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE PROCEDURE assign_task(
+    created_by NUMBER,
+    assigned_to NUMBER,
+    title VARCHAR2,
+    priority VARCHAR2,
+    due_date DATE
+)
+IS
+BEGIN
+    INSERT INTO tasks (assigned_to, created_by, title, priority, due_date)
+    VALUES (assigned_to, created_by, title, priority, due_date);
+END;
+--------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE PROCEDURE assign_task(
+    created_by NUMBER,
+    assigned_to NUMBER,
+    title VARCHAR2,
+    priority VARCHAR2,
+    due_date DATE
+)
+IS
+BEGIN
+    INSERT INTO tasks (assigned_to, created_by, title, priority, due_date)
+    VALUES (assigned_to, created_by, title, priority, due_date);
+END;
+/
+--------------------------------------------------------------------------------------------------------------------
+GRANT EXECUTE ON workflow_pkg TO role_supervisor;
+GRANT EXECUTE ON incident_pkg TO role_supervisor;
+GRANT EXECUTE ON assign_task TO role_supervisor;
+--------------------------------------------------------------------------------------------------------------------
+GRANT EXECUTE ON workflow_pkg TO role_ops_manager;
+GRANT EXECUTE ON incident_pkg TO role_ops_manager;
+GRANT EXECUTE ON reporting_pkg TO role_ops_manager;
+GRANT EXECUTE ON department_spend TO role_ops_manager;
+GRANT EXECUTE ON assign_task TO role_ops_manager;
+--------------------------------------------------------------------------------------------------------------------
+GRANT EXECUTE ON reporting_pkg TO role_executive;
+GRANT EXECUTE ON incident_pkg TO role_executive;
+--------------------------------------------------------------------------------------------------------------------
+CREATE ROLE role_auditor;
+--------------------------------------------------------------------------------------------------------------------
+GRANT SELECT ON audit_logs TO role_auditor;
+--------------------------------------------------------------------------------------------------------------------
+CREATE USER app_employee IDENTIFIED BY "Emp2026#Secure";
+CREATE USER app_auditor IDENTIFIED BY "Aud2026#Secure";
+CREATE USER app_supervisor IDENTIFIED BY "Sup2026#Secure";
+CREATE USER app_ops_manager IDENTIFIED BY "Mgr2026#Secure";
+CREATE USER app_executive IDENTIFIED BY "Exe2026#Secure";
+--------------------------------------------------------------------------------------------------------------------
+GRANT CREATE SESSION TO app_employee;
+GRANT CREATE SESSION TO app_auditor;
+GRANT CREATE SESSION TO app_supervisor;
+GRANT CREATE SESSION TO app_ops_manager;
+GRANT CREATE SESSION TO app_executive;
+--------------------------------------------------------------------------------------------------------------------
+GRANT role_employee TO app_employee;
+GRANT role_auditor TO app_auditor;
+GRANT role_supervisor TO app_supervisor;
+GRANT role_ops_manager TO app_ops_manager;
+GRANT role_executive TO app_executive;
+--------------------------------------------------------------------------------------------------------------------
+SELECT grantee, privilege, table_name
+FROM user_tab_privs
+WHERE grantee IN (
+    'ROLE_EMPLOYEE','ROLE_SUPERVISOR','ROLE_OPS_MANAGER',
+    'ROLE_EXECUTIVE','ROLE_AUDITOR'
+)
+ORDER BY grantee, table_name;
+--------------------------------------------------------------------------------------------------------------------
+SELECT granted_role, grantee
+FROM dba_role_privs
+WHERE grantee IN (
+    'APP_EMPLOYEE','APP_SUPERVISOR','APP_OPS_MANAGER',
+    'APP_EXECUTIVE','APP_AUDIT_EMPLOYEE'
+)
+ORDER BY grantee;
+--------------------------------------------------------------------------------------------------------------------
+CONNECT app_employee/"Emp2026#Secure";
+
+DECLARE
+    v_id NUMBER;
+BEGIN
+    v_id := ADMIN.workflow_pkg.submit_request(
+        p_emp_id      => 6,
+        p_workflow_id => 21,
+        p_notes       => 'Security test request'
+    );
+    DBMS_OUTPUT.PUT_LINE('Submitted: ' || v_id);
+END;
+/
+--------------------------------------------------------------------------------------------------------------------
+CONNECT app_employee/"Emp2026#Secure";
+SELECT * FROM ADMIN.requests;
+--------------------------------------------------------------------------------------------------------------------
+CONNECT app_employee/"Emp2026#Secure";
+BEGIN
+    ADMIN.reporting_pkg.take_kpi_snapshot;
+END;
+/
+--------------------------------------------------------------------------------------------------------------------
+CONNECT app_audit_employee/"Aud2026#Secure";
+
+SELECT table_name, action, changed_at 
+FROM ADMIN.audit_logs 
+WHERE ROWNUM <= 5;
+--------------------------------------------------------------------------------------------------------------------
+CONNECT app_audit_employee/"Aud2026#Secure";
+
+BEGIN
+    ADMIN.workflow_pkg.escalate_overdue;
+END;
+/
+--------------------------------------------------------------------------------------------------------------------
+CONNECT app_audit_employee/"Aud2026#Secure";
+
+BEGIN
+    ADMIN.reporting_pkg.employee_workload_report;
+END;
+/
+--------------------------------------------------------------------------------------------------------------------
+CREATE PUBLIC SYNONYM workflow_pkg FOR ADMIN.workflow_pkg;
+CREATE PUBLIC SYNONYM incident_pkg FOR ADMIN.incident_pkg;
+CREATE PUBLIC SYNONYM reporting_pkg FOR ADMIN.reporting_pkg;
+CREATE PUBLIC SYNONYM department_spend FOR ADMIN.department_spend;
+CREATE PUBLIC SYNONYM assign_task FOR ADMIN.assign_task;
+CREATE PUBLIC SYNONYM audit_logs FOR ADMIN.audit_logs;
+--------------------------------------------------------------------------------------------------------------------
