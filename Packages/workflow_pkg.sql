@@ -26,7 +26,7 @@ CREATE OR REPLACE PACKAGE workflow_pkg AS
 END workflow_pkg;
 /
 
-CREATE OR REPLACE PACKAGE BODY workflow_pkg AS
+create or replace PACKAGE BODY workflow_pkg AS
 
     
     --------------------------------------------------------- get the first stage_id for a workflow
@@ -49,7 +49,7 @@ CREATE OR REPLACE PACKAGE BODY workflow_pkg AS
                 'No stages defined for workflow_id ' || p_workflow_id);
     END get_first_stage;
 
-    
+
     ----------------------------- get the next stage_id after the current one for the specific workflow
     FUNCTION get_next_stage (
         p_workflow_id IN NUMBER,
@@ -152,6 +152,8 @@ CREATE OR REPLACE PACKAGE BODY workflow_pkg AS
         v_new_status requests.status%TYPE;
         v_required_level workflow_stages.required_level%TYPE;
         v_decider_level roles.role_level%TYPE;
+        v_current_dept_id departments.dept_id%TYPE;
+        v_decider_dept_id departments.dept_id%TYPE;
     BEGIN
         SELECT workflow_id, current_stage, status
         INTO v_workflow_id, v_current_stage, v_old_status
@@ -159,7 +161,7 @@ CREATE OR REPLACE PACKAGE BODY workflow_pkg AS
         WHERE request_id = p_request_id
         FOR UPDATE;
 
-        IF v_old_status NOT IN ('PENDING', 'IN_REVIEW', 'ESCALATED', 'IN_PROGRESS') THEN
+        IF v_old_status IN ('REJECTED', 'COMPLETED', 'CANCELLED') THEN
             RAISE_APPLICATION_ERROR(-20004,
                 'Request ' || p_request_id || ' is already ' || v_old_status);
         END IF;
@@ -318,4 +320,3 @@ CREATE OR REPLACE PACKAGE BODY workflow_pkg AS
     END get_sla_status;
 
 END workflow_pkg;
-/
