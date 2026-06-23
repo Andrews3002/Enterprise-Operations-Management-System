@@ -14,5 +14,5 @@ BEGIN
         p_table_name, p_record_id, p_action,
         p_changed_by, p_old_value, p_new_value, SYSTIMESTAMP
     );
+    COMMIT;
 END log_audit;
-/

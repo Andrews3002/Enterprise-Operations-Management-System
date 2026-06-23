@@ -10,5 +10,5 @@ CREATE TABLE requests (
     CONSTRAINT fk_req_workflow FOREIGN KEY (workflow_id) REFERENCES workflows(workflow_id),
     CONSTRAINT fk_req_submitter FOREIGN KEY (submitted_by) REFERENCES employees(emp_id),
     CONSTRAINT fk_req_stage FOREIGN KEY (current_stage) REFERENCES workflow_stages(stage_id),
-    CONSTRAINT check_req_status CHECK (status IN ('PENDING','IN_REVIEW','APPROVED','REJECTED','ESCALATED','CLOSED'))
+    CONSTRAINT check_req_status CHECK (status IN ('PENDING','IN_REVIEW','APPROVED','REJECTED','IN_PROGRESS','COMPLETED','CANCELLED','ESCALATED'))
 );
