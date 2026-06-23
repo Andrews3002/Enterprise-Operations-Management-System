@@ -1,4 +1,4 @@
-CREATE TABLE audit_log (
+CREATE TABLE audit_logs (
     audit_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     table_name VARCHAR2(50) NOT NULL,
     record_id NUMBER NOT NULL,
