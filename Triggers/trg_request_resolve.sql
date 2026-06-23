@@ -1,0 +1,8 @@
+CREATE OR REPLACE TRIGGER trg_request_resolve
+BEFORE UPDATE ON requests
+FOR EACH ROW
+WHEN (NEW.status IN ('COMPLETED','REJECTED','CANCELLED') AND OLD.resolved_at IS NULL)
+BEGIN
+    :NEW.resolved_at := SYSTIMESTAMP;
+END;
+/
