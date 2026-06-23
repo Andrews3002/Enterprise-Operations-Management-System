@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE department_spend(
+create or replace PROCEDURE department_spend(
     p_dept_id NUMBER,
     p_amount_spent NUMBER
 )
@@ -11,4 +11,6 @@ BEGIN
     IF SQL%NOTFOUND THEN
         RAISE_APPLICATION_ERROR(-20001, 'Department ID ' || p_dept_id || ' not found.');
     END IF;
+
+    COMMIT;
 END;
