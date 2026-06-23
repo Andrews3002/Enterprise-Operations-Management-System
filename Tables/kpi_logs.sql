@@ -8,5 +8,5 @@ CREATE TABLE kpi_logs (
     open_requests NUMBER DEFAULT 0,
     sla_breaches NUMBER DEFAULT 0,
     budget_pct_used NUMBER(5,2),
-    CONSTRAINT fk_kpi_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+    CONSTRAINT fk_kpi_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id) ON DELETE CASCADE
 );

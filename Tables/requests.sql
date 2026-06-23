@@ -2,7 +2,7 @@ CREATE TABLE requests (
     request_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     workflow_id NUMBER NOT NULL,
     submitted_by NUMBER NOT NULL,
-    current_stage NUMBER,
+    current_stage NUMBER NOT NULL,
     status VARCHAR2(20) DEFAULT 'PENDING' NOT NULL,
     notes VARCHAR2(1000),
     submitted_at TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
