@@ -26,7 +26,6 @@ CREATE OR REPLACE PACKAGE workflow_pkg AS
 END workflow_pkg;
 /
 
-
 CREATE OR REPLACE PACKAGE BODY workflow_pkg AS
 
     
@@ -160,15 +159,15 @@ CREATE OR REPLACE PACKAGE BODY workflow_pkg AS
         WHERE request_id = p_request_id
         FOR UPDATE;
 
-        IF v_old_status NOT IN ('PENDING', 'IN_REVIEW', 'ESCALATED') THEN
+        IF v_old_status NOT IN ('PENDING', 'IN_REVIEW', 'ESCALATED', 'IN_PROGRESS') THEN
             RAISE_APPLICATION_ERROR(-20004,
                 'Request ' || p_request_id || ' is already ' || v_old_status);
         END IF;
 
-        SELECT ws.required_level, r.role_level
-        INTO v_required_level, v_decider_level
+        SELECT ws.required_level, r.role_level, ws.dept_id, e.dept_id
+        INTO v_required_level, v_decider_level, v_current_dept_id, v_decider_dept_id
         FROM workflow_stages ws
-        JOIN employees e  ON e.emp_id  = p_decider_id
+        JOIN employees e ON e.emp_id = p_decider_id
         JOIN roles r ON r.role_id = e.role_id
         WHERE ws.stage_id = v_current_stage;
 
@@ -176,6 +175,11 @@ CREATE OR REPLACE PACKAGE BODY workflow_pkg AS
             RAISE_APPLICATION_ERROR(-20005,
                 'Decider role level ' || v_decider_level ||
                 ' insufficient for stage requiring level ' || v_required_level);
+        END IF;
+
+        IF v_current_dept_id != v_decider_dept_id THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'The decider is not part of nor responsible for department id ' || v_current_dept_id || ' and therefore is not authorized to make a decision on this stage of the request');
         END IF;
 
         INSERT INTO decisions (
