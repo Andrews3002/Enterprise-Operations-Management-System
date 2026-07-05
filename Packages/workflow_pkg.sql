@@ -250,12 +250,13 @@ create or replace PACKAGE BODY workflow_pkg AS
             FROM requests  r
             JOIN workflows w ON w.workflow_id = r.workflow_id
             WHERE r.status IN ('PENDING', 'IN_REVIEW', 'APPROVED', 'IN_PROGRESS')
-            AND r.submitted_at + (w.sla_hours / 24) < SYSTIMESTAMP;
+            AND (FROM_TZ(r.submitted_at, 'UTC') + NUMTODSINTERVAL(w.sla_hours, 'HOUR')) < SYSTIMESTAMP;
 
         v_count NUMBER := 0;
         v_old_status requests.status%TYPE;
     BEGIN
         FOR rec IN c_overdue LOOP
+            DBMS_OUTPUT.PUT_LINE(rec.request_id);
             v_old_status := rec.status;
 
             UPDATE requests
