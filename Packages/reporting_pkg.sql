@@ -7,6 +7,8 @@ CREATE OR REPLACE PACKAGE reporting_pkg AS
 
     FUNCTION incident_trend_report RETURN SYS_REFCURSOR;
 
+    FUNCTION workflow_bottleneck_report RETURN SYS_REFCURSOR;
+
 END reporting_pkg;
 /
 
@@ -167,6 +169,68 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
 
         RETURN v_cur;
     END incident_trend_report;
+
+    FUNCTION workflow_bottleneck_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            WITH stage_decisions AS (
+                SELECT
+                    d.request_id,
+                    d.stage_id,
+                    ws.stage_name,
+                    ws.stage_seq,
+                    w.workflow_name,
+                    d.decision_at,
+                    LAG(d.decision_at) OVER (
+                        PARTITION BY d.request_id
+                        ORDER BY ws.stage_seq
+                    ) AS prev_decision_at
+                FROM decisions d
+                JOIN workflow_stages ws ON ws.stage_id  = d.stage_id
+                JOIN requests r ON r.request_id = d.request_id
+                JOIN workflows w ON w.workflow_id = r.workflow_id
+            ),
+            dwell_times AS (
+                SELECT
+                    sd.workflow_name,
+                    sd.stage_name,
+                    sd.stage_seq,
+                    ROUND(
+                        EXTRACT(DAY  FROM (sd.decision_at - NVL(sd.prev_decision_at,
+                            (SELECT r.submitted_at FROM requests r
+                             WHERE r.request_id = sd.request_id)
+                        ))) * 24
+                        + EXTRACT(HOUR FROM (sd.decision_at - NVL(sd.prev_decision_at,
+                            (SELECT r.submitted_at FROM requests r
+                             WHERE r.request_id = sd.request_id)
+                        )))
+                        + EXTRACT(MINUTE FROM (sd.decision_at - NVL(sd.prev_decision_at,
+                            (SELECT r.submitted_at FROM requests r
+                             WHERE r.request_id = sd.request_id)
+                        ))) / 60,
+                    2) AS dwell_hours
+                FROM stage_decisions sd
+            )
+            SELECT
+                workflow_name,
+                stage_name,
+                stage_seq,
+                COUNT(*) AS requests_through_stage,
+                ROUND(AVG(dwell_hours), 2) AS avg_dwell_hours,
+                ROUND(MAX(dwell_hours), 2) AS max_dwell_hours,
+                
+                RANK() OVER (
+                    PARTITION BY workflow_name
+                    ORDER BY AVG(dwell_hours) DESC
+                )
+            AS bottleneck_rank
+            FROM dwell_times
+            GROUP BY workflow_name, stage_name, stage_seq
+            ORDER BY workflow_name, bottleneck_rank;
+
+        RETURN v_cur;
+    END workflow_bottleneck_report;
 
 END reporting_pkg;
 /
