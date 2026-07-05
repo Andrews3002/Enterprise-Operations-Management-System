@@ -46,16 +46,15 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
             SELECT COUNT(*) 
             INTO v_open_req
             FROM requests r
-            JOIN employees e ON e.emp_id = r.submitted_by
-            WHERE e.dept_id  = dept.dept_id
+            JOIN workflow_stages ws ON ws.stage_id = r.current_stage
+            WHERE ws.dept_id  = dept.dept_id
             AND r.status NOT IN ('COMPLETED','CANCELLED','REJECTED');
 
             SELECT COUNT(*) 
             INTO v_breaches
             FROM requests r
-            JOIN workflows w ON w.workflow_id = r.workflow_id
-            JOIN employees e ON e.emp_id = r.submitted_by
-            WHERE e.dept_id = dept.dept_id
+            JOIN workflow_stages ws ON ws.stage_id = r.current_stage
+            WHERE ws.dept_id = dept.dept_id
             AND r.status  = 'ESCALATED'
             AND TRUNC(r.submitted_at, 'MM') = TRUNC(SYSDATE, 'MM');
 
