@@ -2,7 +2,7 @@ CREATE TABLE incidents (
     incident_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     dept_id NUMBER NOT NULL,
     reported_by NUMBER NULL,
-    assigned_to NUMBER NOT NULL,
+    assigned_to NUMBER NULL,
     title VARCHAR2(200) NOT NULL,
     description CLOB,
     severity VARCHAR2(10) NOT NULL,

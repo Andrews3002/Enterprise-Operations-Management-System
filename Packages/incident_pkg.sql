@@ -51,7 +51,6 @@ CREATE OR REPLACE PACKAGE BODY incident_pkg AS
 
     PROCEDURE auto_assign (p_incident_id IN NUMBER) AS
         v_dept_id incidents.dept_id%TYPE;
-        v_assignee employees.emp_id%TYPE;
         v_ops_manager_id departments.manager_id%TYPE;
     BEGIN
         SELECT i.dept_id, d.manager_id
@@ -61,8 +60,8 @@ CREATE OR REPLACE PACKAGE BODY incident_pkg AS
         ON d.dept_id = i.dept_id
         WHERE i.incident_id = p_incident_id;
 
-        IF manager_id IS NULL THEN
-            RAISE.RAISE_APPLICATION_ERROR(20001, "the department does not have manager");
+        IF v_ops_manager_id IS NULL THEN
+            RAISE_APPLICATION_ERROR(-20001, 'the department does not have manager');
         END IF;
 
         UPDATE incidents
@@ -103,8 +102,6 @@ CREATE OR REPLACE PACKAGE BODY incident_pkg AS
 
         UPDATE incidents
         SET status = 'RESOLVED',
-            resolved_at = SYSTIMESTAMP,
-            resolution_min = v_minutes,
             description = description || CHR(10) || 'RESOLUTION: ' || p_resolution
         WHERE incident_id = p_incident_id;
 

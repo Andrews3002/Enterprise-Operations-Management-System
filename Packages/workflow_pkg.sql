@@ -2,17 +2,17 @@ CREATE OR REPLACE PACKAGE workflow_pkg AS
 
     -- Submits a new request and returns the id of the created request
     FUNCTION submit_request (
-        p_emp_id      IN NUMBER,
+        p_emp_id IN NUMBER,
         p_workflow_id IN NUMBER,
-        p_notes       IN VARCHAR2 DEFAULT NULL
+        p_notes IN VARCHAR2 DEFAULT NULL
     ) RETURN NUMBER;
 
     -- Adds an approval or rejection decision to the decisions table and advances or closes the request based on the decision
     PROCEDURE decide_stage (
-        p_request_id  IN NUMBER,
-        p_decider_id  IN NUMBER,
-        p_decision    IN VARCHAR2,
-        p_comments    IN VARCHAR2 DEFAULT NULL
+        p_request_id IN NUMBER,
+        p_decider_id IN NUMBER,
+        p_decision IN VARCHAR2,
+        p_comments IN VARCHAR2 DEFAULT NULL
     );
 
     -- checks to see if jobs are overdue and if they are escalates the job to a hire authority to handle
@@ -196,10 +196,8 @@ create or replace PACKAGE BODY workflow_pkg AS
             IF v_next_stage IS NULL THEN
                 v_new_status := 'COMPLETED';
                 UPDATE requests
-                SET    status = v_new_status,
-                       current_stage = NULL,
-                       resolved_at = SYSTIMESTAMP
-                WHERE  request_id = p_request_id;
+                SET status = v_new_status
+                WHERE request_id = p_request_id;
             ELSE
                 SELECT stage_name
                 INTO v_next_stage_name
@@ -224,9 +222,7 @@ create or replace PACKAGE BODY workflow_pkg AS
         ELSIF p_decision = 'REJECTED' THEN
             v_new_status := 'REJECTED';
             UPDATE requests
-            SET status = v_new_status, 
-                current_stage = NULL, 
-                resolved_at = SYSTIMESTAMP
+            SET status = v_new_status
             WHERE request_id = p_request_id;
         END IF;
 
@@ -292,18 +288,24 @@ create or replace PACKAGE BODY workflow_pkg AS
         v_sla_hours NUMBER;
         v_hours_used NUMBER;
         v_pct NUMBER;
+        v_request_status requests.status%TYPE;
     BEGIN
-        SELECT r.submitted_at, w.sla_hours
-        INTO v_submitted, v_sla_hours
+        SELECT r.submitted_at, w.sla_hours, r.status
+        INTO v_submitted, v_sla_hours, v_request_status
         FROM requests  r
-        JOIN workflows w ON w.workflow_id = r.workflow_id
+        JOIN workflows w 
+        ON w.workflow_id = r.workflow_id
         WHERE r.request_id = p_request_id;
 
-        v_hours_used := EXTRACT(DAY    FROM (SYSTIMESTAMP - v_submitted)) * 24 
-                        + EXTRACT(HOUR   FROM (SYSTIMESTAMP - v_submitted))
-                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - v_submitted)) / 60
-                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - v_submitted)) / 3600;
+        IF v_request_status IN ('COMPLETED', 'REJECTED', 'CANCELLED') THEN
+            RETURN 'RESOLVED';
+        END IF;
 
+        v_hours_used := (CAST(SYSTIMESTAMP AS DATE) - CAST(v_submitted AS DATE)) * 24;
+
+        DBMS_OUTPUT.PUT_LINE('time given to complete request: ' || v_sla_hours || ' hours');
+        DBMS_OUTPUT.PUT_LINE('time passed: ' || v_hours_used || ' hours');
+    
         v_pct := (v_hours_used / v_sla_hours) * 100;
 
         IF v_pct < 70 THEN 
@@ -320,3 +322,4 @@ create or replace PACKAGE BODY workflow_pkg AS
     END get_sla_status;
 
 END workflow_pkg;
+/
