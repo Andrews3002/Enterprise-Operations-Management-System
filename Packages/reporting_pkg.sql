@@ -9,6 +9,8 @@ CREATE OR REPLACE PACKAGE reporting_pkg AS
 
     FUNCTION workflow_bottleneck_report RETURN SYS_REFCURSOR;
 
+    FUNCTION budget_utilisation_report RETURN SYS_REFCURSOR;
+
 END reporting_pkg;
 /
 
@@ -231,6 +233,33 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
 
         RETURN v_cur;
     END workflow_bottleneck_report;
+
+    FUNCTION budget_utilisation_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                d.dept_name,
+                b.allocated,
+                b.spent,
+                b.allocated - b.spent AS remaining,
+                ROUND((b.spent / NULLIF(b.allocated,0)) * 100, 2) AS pct_used,
+                ROUND(RATIO_TO_REPORT(b.spent) OVER () * 100, 2) AS pct_of_company_spend,
+                RANK() OVER (ORDER BY b.spent DESC) AS spend_rank,
+                CASE
+                    WHEN b.spent / NULLIF(b.allocated,0) >= 1.00 THEN 'OVERSPENT'
+                    WHEN b.spent / NULLIF(b.allocated,0) >= 0.85 THEN 'AT_RISK'
+                    WHEN b.spent / NULLIF(b.allocated,0) >= 0.60 THEN 'ON_TRACK'
+                    ELSE 'UNDERSPENT'
+                END AS spend_status
+            FROM budgets b
+            JOIN departments d ON d.dept_id = b.dept_id
+            WHERE b.fiscal_year = TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY'))
+            ORDER BY spend_rank;
+
+        RETURN v_cur;
+    END budget_utilisation_report;
+
 
 END reporting_pkg;
 /
