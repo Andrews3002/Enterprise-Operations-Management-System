@@ -11,6 +11,8 @@ CREATE OR REPLACE PACKAGE reporting_pkg AS
 
     FUNCTION budget_utilisation_report RETURN SYS_REFCURSOR;
 
+    FUNCTION request_aging_report RETURN SYS_REFCURSOR;
+
 END reporting_pkg;
 /
 
@@ -259,6 +261,81 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
 
         RETURN v_cur;
     END budget_utilisation_report;
+
+    FUNCTION request_aging_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                r.request_id,
+                w.workflow_name,
+                e.first_name || ' ' || e.last_name AS submitted_by,
+                d.dept_name,
+                ws.stage_name AS waiting_at_stage,
+                r.status,
+                r.submitted_at,
+                ROUND(
+                    EXTRACT(DAY FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) * 24
+                    + EXTRACT(HOUR FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC')))
+                    + EXTRACT(MINUTE FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 60
+                    + EXTRACT(SECOND FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 3600,
+                1) AS hours_open,
+                CASE
+                    WHEN (
+                        EXTRACT(DAY FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) * 24
+                        + EXTRACT(HOUR FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC')))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 3600
+                    ) < 24 THEN 'Under 1 day'
+                    WHEN (
+                        EXTRACT(DAY FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) * 24
+                        + EXTRACT(HOUR FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC')))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 3600
+                    ) < 72    THEN '1-3 days'
+                    WHEN (
+                        EXTRACT(DAY FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) * 24
+                        + EXTRACT(HOUR FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC')))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 3600
+                    ) < 168   THEN '3-7 days'
+                    WHEN (
+                        EXTRACT(DAY FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) * 24
+                        + EXTRACT(HOUR FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC')))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 3600
+                    ) < 336   THEN '1-2 weeks'
+                    ELSE 'Over 2 weeks'
+                END AS age_bucket,
+                CASE
+                    WHEN (
+                        EXTRACT(DAY FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) * 24
+                        + EXTRACT(HOUR FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC')))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 3600
+                    ) / w.sla_hours < 0.70 THEN 'ON_TRACK'
+                    WHEN (
+                        EXTRACT(DAY FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) * 24
+                        + EXTRACT(HOUR FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC')))
+                        + EXTRACT(MINUTE FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 60
+                        + EXTRACT(SECOND FROM (SYSTIMESTAMP - FROM_TZ(r.submitted_at, 'UTC'))) / 3600
+                    ) / w.sla_hours < 1.00 THEN 'AT_RISK'
+                    ELSE 'BREACHED'
+                END AS sla_status,
+                RANK() OVER (
+                    PARTITION BY d.dept_id
+                    ORDER BY r.submitted_at ASC
+                ) AS dept_age_rank
+            FROM requests r
+            JOIN workflows w ON w.workflow_id = r.workflow_id
+            JOIN employees e ON e.emp_id = r.submitted_by
+            JOIN departments d ON d.dept_id = e.dept_id
+            LEFT JOIN workflow_stages ws ON ws.stage_id = r.current_stage
+            WHERE r.status NOT IN ('COMPLETED','REJECTED','CANCELLED')
+            ORDER BY hours_open DESC;
+
+        RETURN v_cur;
+    END request_aging_report;
 
 
 END reporting_pkg;
