@@ -159,3 +159,63 @@ UPDATE DEPARTMENTS
 SET manager_id = 25
 WHERE dept_id = 5;
 COMMIT;
+
+-- More requests across different workflows and departments
+DECLARE
+    v_id NUMBER;
+BEGIN
+    -- Equipment requests from IT staff (workflow 22)
+    v_id := workflow_pkg.submit_request(7,  2, 'Laptop replacement needed');
+    v_id := workflow_pkg.submit_request(6,  2, 'Monitor upgrade request');
+    v_id := workflow_pkg.submit_request(12, 3, 'Leave request - 3 days');
+    v_id := workflow_pkg.submit_request(17, 1, 'Overtime approval needed');
+    v_id := workflow_pkg.submit_request(21, 1, 'Leave request - 1 week');
+    v_id := workflow_pkg.submit_request(22, 2, 'Second equipment request');
+    DBMS_OUTPUT.PUT_LINE('Requests seeded.');
+END;
+/
+
+-- More incidents across departments
+DECLARE
+    v_id NUMBER;
+BEGIN
+    v_id := incident_pkg.log_incident(1, 1,  'Payroll system delay',      'MEDIUM');
+    v_id := incident_pkg.log_incident(2, 7,  'Network outage - floor 2',  'CRITICAL');
+    v_id := incident_pkg.log_incident(3, 12, 'Invoice processing backlog', 'LOW');
+    v_id := incident_pkg.log_incident(4, 21, 'Supplier delivery failure',  'HIGH');
+    v_id := incident_pkg.log_incident(2, 6,  'VPN authentication failure', 'HIGH');
+    DBMS_OUTPUT.PUT_LINE('Incidents seeded.');
+END;
+/
+
+-- Resolve a couple of incidents so avg_resolution_h has data
+BEGIN
+    incident_pkg.resolve_incident(1, 9, 'Email server restarted and restored.');
+    incident_pkg.resolve_incident(3, 9, 'VPN certificates renewed.');
+END;
+/
+
+-- Add some tasks so workload report shows real distribution
+INSERT INTO tasks (assigned_to, created_by, title, priority)
+VALUES (6,  9, 'Patch server OS',          'HIGH');
+INSERT INTO tasks (assigned_to, created_by, title, priority)
+VALUES (7,  9, 'Update firewall rules',    'MEDIUM');
+INSERT INTO tasks (assigned_to, created_by, title, priority)
+VALUES (6,  9, 'Audit user accounts',      'HIGH');
+INSERT INTO tasks (assigned_to, created_by, title, priority)
+VALUES (8,  9, 'Deploy monitoring agent',  'LOW');
+INSERT INTO tasks (assigned_to, created_by, title, priority)
+VALUES (1,  3, 'Review leave policy',      'MEDIUM');
+INSERT INTO tasks (assigned_to, created_by, title, priority)
+VALUES (2,  3, 'Update employee handbook', 'LOW');
+COMMIT;
+
+-- More budget spend across departments
+BEGIN
+    department_spend(1, 12500);
+    department_spend(2, 87000);
+    department_spend(3, 45000);
+    department_spend(4, 8200);
+    department_spend(5, 1100);
+END;
+/
