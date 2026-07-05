@@ -12,6 +12,8 @@ CREATE OR REPLACE PACKAGE reporting_pkg AS
     FUNCTION budget_utilisation_report RETURN SYS_REFCURSOR;
 
     FUNCTION request_aging_report RETURN SYS_REFCURSOR;
+    
+    FUNCTION dept_kpi_trend_report RETURN SYS_REFCURSOR;
 
 END reporting_pkg;
 /
@@ -336,6 +338,41 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
 
         RETURN v_cur;
     END request_aging_report;
+
+    FUNCTION dept_kpi_trend_report RETURN SYS_REFCURSOR AS
+        v_cur SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cur FOR
+            SELECT
+                d.dept_name,
+                k.snapshot_date,
+                k.open_incidents,
+                k.open_requests,
+                k.sla_breaches,
+                k.budget_pct_used,
+                k.open_incidents - LAG(k.open_incidents) OVER (
+                    PARTITION BY k.dept_id
+                    ORDER BY k.snapshot_date
+                ) AS incident_delta,
+                k.open_requests - LAG(k.open_requests) OVER (
+                    PARTITION BY k.dept_id
+                    ORDER BY k.snapshot_date
+                ) AS request_delta,
+                k.budget_pct_used - LAG(k.budget_pct_used) OVER (
+                    PARTITION BY k.dept_id
+                    ORDER BY k.snapshot_date
+                ) AS budget_delta,
+                ROUND(AVG(k.open_incidents) OVER (
+                    PARTITION BY k.dept_id
+                    ORDER BY k.snapshot_date
+                    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+                ), 2) AS inc_3day_avg
+            FROM kpi_logs k
+            JOIN departments d ON d.dept_id = k.dept_id
+            ORDER BY d.dept_name, k.snapshot_date;
+
+        RETURN v_cur;
+    END dept_kpi_trend_report;
 
 
 END reporting_pkg;
