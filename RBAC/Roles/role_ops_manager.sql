@@ -1,8 +1,6 @@
 CREATE ROLE role_ops_manager;
 
--- GRANT EXECUTE ON workflow_pkg TO role_ops_manager;
--- GRANT EXECUTE ON incident_pkg TO role_ops_manager;
--- GRANT EXECUTE ON reporting_pkg TO role_ops_manager;
--- GRANT EXECUTE ON department_spend TO role_ops_manager;
--- GRANT EXECUTE ON assign_task TO role_ops_manager;
--- GRANT SELECT ON mv_dept_dashboard TO role_ops_manager;
+GRANT EXECUTE ON employee_pkg TO role_ops_manager;
+GRANT EXECUTE ON supervisor_pkg TO role_ops_manager;
+GRANT EXECUTE ON ops_manager_pkg TO role_ops_manager;
+GRANT SELECT ON mv_dept_dashboard TO role_ops_manager;
