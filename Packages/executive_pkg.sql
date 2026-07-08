@@ -1,5 +1,4 @@
-CREATE OR REPLACE PACKAGE reporting_pkg AS
-    PROCEDURE take_kpi_snapshot;
+create or replace PACKAGE executive_pkg AS
 
     FUNCTION dept_efficiency_report RETURN SYS_REFCURSOR;
 
@@ -12,89 +11,12 @@ CREATE OR REPLACE PACKAGE reporting_pkg AS
     FUNCTION budget_utilisation_report RETURN SYS_REFCURSOR;
 
     FUNCTION request_aging_report RETURN SYS_REFCURSOR;
-    
+
     FUNCTION dept_kpi_trend_report RETURN SYS_REFCURSOR;
 
-END reporting_pkg;
-/
+END executive_pkg;
 
-CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
-    PROCEDURE take_kpi_snapshot AS
-        CURSOR c_depts IS 
-            SELECT dept_id 
-            FROM departments;
-            
-        v_open_inc NUMBER;
-        v_resolved NUMBER;
-        v_avg_res_h NUMBER;
-        v_open_req NUMBER;
-        v_breaches NUMBER;
-        v_budget_pct NUMBER;
-    BEGIN
-        FOR dept IN c_depts LOOP
-            SELECT COUNT(*) 
-            INTO v_open_inc
-            FROM incidents
-            WHERE dept_id = dept.dept_id
-            AND status IN ('OPEN','IN_PROGRESS');
-
-            SELECT COUNT(*) 
-            INTO v_resolved
-            FROM incidents
-            WHERE dept_id = dept.dept_id
-            AND status = 'RESOLVED'
-            AND TRUNC(resolved_at) = TRUNC(SYSDATE);
-
-            SELECT ROUND(AVG(resolution_min) / 60, 2)
-            INTO v_avg_res_h
-            FROM incidents
-            WHERE dept_id = dept.dept_id
-            AND resolution_min IS NOT NULL;
-
-            SELECT COUNT(*) 
-            INTO v_open_req
-            FROM requests r
-            JOIN workflow_stages ws ON ws.stage_id = r.current_stage
-            WHERE ws.dept_id  = dept.dept_id
-            AND r.status NOT IN ('COMPLETED','CANCELLED','REJECTED');
-
-            SELECT COUNT(*) 
-            INTO v_breaches
-            FROM requests r
-            JOIN workflow_stages ws ON ws.stage_id = r.current_stage
-            WHERE ws.dept_id = dept.dept_id
-            AND r.status  = 'ESCALATED'
-            AND TRUNC(r.submitted_at, 'MM') = TRUNC(SYSDATE, 'MM');
-
-            SELECT ROUND((spent / NULLIF(allocated,0)) * 100, 2)
-            INTO v_budget_pct
-            FROM budgets
-            WHERE dept_id = dept.dept_id
-            AND fiscal_year = TO_NUMBER(TO_CHAR(SYSDATE,'YYYY'));
-
-            -- Upsert — update today's snapshot if it exists, else insert
-            MERGE INTO kpi_logs k
-            USING (SELECT dept.dept_id AS dept_id, TRUNC(SYSDATE) AS snap_date
-                   FROM dual) src
-            ON (k.dept_id = src.dept_id AND k.snapshot_date = src.snap_date)
-            WHEN MATCHED THEN UPDATE SET
-                open_incidents  = v_open_inc,
-                resolved_today  = v_resolved,
-                avg_resolution_h = v_avg_res_h,
-                open_requests   = v_open_req,
-                sla_breaches    = v_breaches,
-                budget_pct_used = v_budget_pct
-            WHEN NOT MATCHED THEN INSERT (
-                dept_id, snapshot_date, open_incidents, resolved_today,
-                avg_resolution_h, open_requests, sla_breaches, budget_pct_used
-            ) VALUES (
-                dept.dept_id, TRUNC(SYSDATE), v_open_inc, v_resolved,
-                v_avg_res_h, v_open_req, v_breaches, v_budget_pct
-            );
-
-        END LOOP;
-        COMMIT;
-    END take_kpi_snapshot;
+create or replace PACKAGE BODY executive_pkg AS
 
     ------------------------------------------------------------------ rank departments by efficiency
     FUNCTION dept_efficiency_report RETURN SYS_REFCURSOR AS
@@ -106,7 +28,7 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
                 COUNT(DISTINCT i.incident_id) AS total_incidents,
                 ROUND(AVG(i.resolution_min) / 60, 2) AS avg_resolution_h,
                 COUNT(CASE WHEN i.status IN ('OPEN','IN_PROGRESS') THEN 1 END) AS open_incidents,
-                
+
                 RANK() OVER (
                     ORDER BY AVG(i.resolution_min) ASC NULLS LAST
                 ) AS efficiency_rank,
@@ -132,12 +54,12 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
                 d.dept_name,
                 e.first_name || ' ' || e.last_name   AS employee_name,
                 COUNT(t.task_id) AS active_tasks,
-                
+
                 DENSE_RANK() OVER (
                     PARTITION BY e.dept_id
                     ORDER BY COUNT(t.task_id) DESC
                 ) AS dept_workload_rank,
-                
+
                 ROUND(
                     COUNT(t.task_id) * 100.0 /
                     NULLIF(SUM(COUNT(t.task_id)) OVER (PARTITION BY e.dept_id), 0),
@@ -162,7 +84,7 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
                 TRUNC(reported_at, 'IW') AS week_start,
                 severity,
                 COUNT(*) AS incident_count,
-                
+
                 SUM(COUNT(*)) OVER (
                     PARTITION BY severity
                     ORDER BY TRUNC(reported_at, 'IW')
@@ -225,7 +147,7 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
                 COUNT(*) AS requests_through_stage,
                 ROUND(AVG(dwell_hours), 2) AS avg_dwell_hours,
                 ROUND(MAX(dwell_hours), 2) AS max_dwell_hours,
-                
+
                 RANK() OVER (
                     PARTITION BY workflow_name
                     ORDER BY AVG(dwell_hours) DESC
@@ -375,5 +297,4 @@ CREATE OR REPLACE PACKAGE BODY reporting_pkg AS
     END dept_kpi_trend_report;
 
 
-END reporting_pkg;
-/
+END executive_pkg;

@@ -1,11 +1,4 @@
-CREATE OR REPLACE PACKAGE workflow_pkg AS
-
-    -- Submits a new request and returns the id of the created request
-    FUNCTION submit_request (
-        p_emp_id IN NUMBER,
-        p_workflow_id IN NUMBER,
-        p_notes IN VARCHAR2 DEFAULT NULL
-    ) RETURN NUMBER;
+create or replace PACKAGE supervisor_pkg AS
 
     -- Adds an approval or rejection decision to the decisions table and advances or closes the request based on the decision
     PROCEDURE decide_stage (
@@ -15,39 +8,22 @@ CREATE OR REPLACE PACKAGE workflow_pkg AS
         p_comments IN VARCHAR2 DEFAULT NULL
     );
 
-    -- checks to see if jobs are overdue and if they are escalates the job to a hire authority to handle
-    PROCEDURE escalate_overdue;
-
     -- based on the workflow's sla_hours, requests are evaluated as ON_TRACK, AT_RISK, or BREACHED
     FUNCTION get_sla_status (
         p_request_id IN NUMBER
     ) RETURN VARCHAR2;
 
-END workflow_pkg;
-/
+    PROCEDURE assign_task(
+        created_by NUMBER,
+        assigned_to NUMBER,
+        title VARCHAR2,
+        priority VARCHAR2,
+        due_date DATE
+    );
 
-create or replace PACKAGE BODY workflow_pkg AS
+END supervisor_pkg;
 
-    
-    --------------------------------------------------------- get the first stage_id for a workflow
-    FUNCTION get_first_stage (p_workflow_id IN NUMBER) RETURN NUMBER AS
-        v_stage_id workflow_stages.stage_id%TYPE;
-    BEGIN
-        SELECT stage_id
-        INTO v_stage_id
-        FROM workflow_stages
-        WHERE workflow_id = p_workflow_id
-        AND stage_seq   = (
-                   SELECT MIN(stage_seq)
-                   FROM   workflow_stages
-                   WHERE  workflow_id = p_workflow_id
-               );
-        RETURN v_stage_id;
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            RAISE_APPLICATION_ERROR(-20001,
-                'No stages defined for workflow_id ' || p_workflow_id);
-    END get_first_stage;
+create or replace PACKAGE BODY supervisor_pkg AS
 
 
     ----------------------------- get the next stage_id after the current one for the specific workflow
@@ -76,66 +52,6 @@ create or replace PACKAGE BODY workflow_pkg AS
         WHEN NO_DATA_FOUND THEN
             RETURN NULL;
     END get_next_stage;
-
-
-    ------------------------------------------------------------------- submit_request
-    FUNCTION submit_request (
-        p_emp_id IN NUMBER,
-        p_workflow_id IN NUMBER,
-        p_notes IN VARCHAR2 DEFAULT NULL
-    ) RETURN NUMBER AS
-        v_request_id  requests.request_id%TYPE;
-        v_first_stage requests.current_stage%TYPE;
-    BEGIN
-        DECLARE
-            v_check NUMBER;
-        BEGIN
-            SELECT 1 INTO v_check
-            FROM employees
-            WHERE emp_id = p_emp_id AND is_active = 1;
-        EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-                RAISE_APPLICATION_ERROR(-20002,
-                    'Employee ' || p_emp_id || ' not found or inactive.');
-        END;
-
-        DECLARE
-            v_check NUMBER;
-        BEGIN
-            SELECT 1 INTO v_check
-            FROM workflows
-            WHERE workflow_id = p_workflow_id AND is_active = 1;
-        EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-                RAISE_APPLICATION_ERROR(-20003,
-                    'Workflow ' || p_workflow_id || ' not found or inactive.');
-        END;
-
-        v_first_stage := get_first_stage(p_workflow_id);
-
-        INSERT INTO requests (
-            workflow_id, submitted_by, current_stage, status, notes
-        ) VALUES (
-            p_workflow_id, p_emp_id, v_first_stage, 'PENDING', p_notes
-        )
-        RETURNING request_id INTO v_request_id;
-
-        log_audit(
-            p_table_name => 'REQUESTS',
-            p_record_id => v_request_id,
-            p_action => 'INSERT',
-            p_changed_by => p_emp_id,
-            p_new_value => 'status=PENDING, stage=' || v_first_stage
-        );
-
-        COMMIT;
-        RETURN v_request_id;
-
-    EXCEPTION
-        WHEN OTHERS THEN
-            ROLLBACK;
-            RAISE;
-    END submit_request;
 
     ----------------------------------------------------------------------- decide_stage
     PROCEDURE decide_stage (
@@ -243,46 +159,6 @@ create or replace PACKAGE BODY workflow_pkg AS
             RAISE;
     END decide_stage;
 
-    ------------------------------------------------------------------ escalate_overdue requests
-    PROCEDURE escalate_overdue AS
-        CURSOR c_overdue IS
-            SELECT r.request_id, r.submitted_at, w.sla_hours, r.status
-            FROM requests  r
-            JOIN workflows w ON w.workflow_id = r.workflow_id
-            WHERE r.status IN ('PENDING', 'IN_REVIEW', 'APPROVED', 'IN_PROGRESS')
-            AND (FROM_TZ(r.submitted_at, 'UTC') + NUMTODSINTERVAL(w.sla_hours, 'HOUR')) < SYSTIMESTAMP;
-
-        v_count NUMBER := 0;
-        v_old_status requests.status%TYPE;
-    BEGIN
-        FOR rec IN c_overdue LOOP
-            DBMS_OUTPUT.PUT_LINE(rec.request_id);
-            v_old_status := rec.status;
-
-            UPDATE requests
-            SET status = 'ESCALATED'
-            WHERE request_id = rec.request_id;
-
-            log_audit(
-                p_table_name => 'REQUESTS',
-                p_record_id => rec.request_id,
-                p_action => 'UPDATE',
-                p_changed_by => NULL,
-                p_old_value => v_old_status,
-                p_new_value => 'status=ESCALATED'
-            );
-
-            v_count := v_count + 1;
-        END LOOP;
-
-        COMMIT;
-        DBMS_OUTPUT.PUT_LINE('Escalated ' || v_count || ' overdue requests.');
-    EXCEPTION
-        WHEN OTHERS THEN
-            ROLLBACK;
-            RAISE;
-    END escalate_overdue;
-
     ------------------------------------------------------------------------------ get_sla_status
     FUNCTION get_sla_status (p_request_id IN NUMBER) RETURN VARCHAR2 AS
         v_submitted TIMESTAMP;
@@ -306,7 +182,7 @@ create or replace PACKAGE BODY workflow_pkg AS
 
         DBMS_OUTPUT.PUT_LINE('time given to complete request: ' || v_sla_hours || ' hours');
         DBMS_OUTPUT.PUT_LINE('time passed: ' || v_hours_used || ' hours');
-    
+
         v_pct := (v_hours_used / v_sla_hours) * 100;
 
         IF v_pct < 70 THEN 
@@ -322,5 +198,17 @@ create or replace PACKAGE BODY workflow_pkg AS
                 'Request ' || p_request_id || ' not found.');
     END get_sla_status;
 
-END workflow_pkg;
-/
+    PROCEDURE assign_task(
+        created_by NUMBER,
+        assigned_to NUMBER,
+        title VARCHAR2,
+        priority VARCHAR2,
+        due_date DATE
+    )
+    IS
+    BEGIN
+        INSERT INTO tasks (assigned_to, created_by, title, priority, due_date)
+        VALUES (assigned_to, created_by, title, priority, due_date);
+    END assign_task;
+
+END supervisor_pkg;
