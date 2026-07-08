@@ -1,7 +1,5 @@
-CREATE PUBLIC SYNONYM workflow_pkg FOR ADMIN.workflow_pkg;
-CREATE PUBLIC SYNONYM incident_pkg FOR ADMIN.incident_pkg;
-CREATE PUBLIC SYNONYM reporting_pkg FOR ADMIN.reporting_pkg;
-CREATE PUBLIC SYNONYM department_spend FOR ADMIN.department_spend;
-CREATE PUBLIC SYNONYM assign_task FOR ADMIN.assign_task;
-CREATE PUBLIC SYNONYM audit_logs FOR ADMIN.audit_logs;
+CREATE PUBLIC SYNONYM employee_pkg FOR ADMIN.employee_pkg;
+CREATE PUBLIC SYNONYM supervisor_pkg FOR ADMIN.supervisor_pkg;
+CREATE PUBLIC SYNONYM ops_manager_pkg FOR ADMIN.ops_manager_pkg;
+CREATE PUBLIC SYNONYM executive_pkg FOR ADMIN.executive_pkg;
 CREATE PUBLIC SYNONYM mv_dept_dashboard FOR ADMIN.mv_dept_dashboard;
