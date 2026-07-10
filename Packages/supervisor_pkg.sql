@@ -22,6 +22,7 @@ create or replace PACKAGE supervisor_pkg AS
     );
 
 END supervisor_pkg;
+/
 
 create or replace PACKAGE BODY supervisor_pkg AS
 
@@ -209,6 +210,8 @@ create or replace PACKAGE BODY supervisor_pkg AS
     BEGIN
         INSERT INTO tasks (assigned_to, created_by, title, priority, due_date)
         VALUES (assigned_to, created_by, title, priority, due_date);
+        COMMIT;
     END assign_task;
 
 END supervisor_pkg;
+/
