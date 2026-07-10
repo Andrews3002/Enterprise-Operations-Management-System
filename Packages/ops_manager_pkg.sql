@@ -73,7 +73,9 @@ create or replace PACKAGE BODY ops_manager_pkg AS
         SELECT dept_id
         INTO v_user_dept_id
         FROM employees
-        WHERE emp_id = p_user_id;
+        WHERE emp_id = p_user_id
+        AND role_id = 3
+        AND is_active = 1;
 
         IF v_user_dept_id != p_dept_id THEN
             RAISE_APPLICATION_ERROR(-20001, 'You can only spend funds on behalf of your own department');
