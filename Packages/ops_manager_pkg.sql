@@ -90,6 +90,9 @@ create or replace PACKAGE BODY ops_manager_pkg AS
         END IF;
 
         COMMIT;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20001, 'you are not an active ops manager');
     END department_spend;
 
 END ops_manager_pkg;
