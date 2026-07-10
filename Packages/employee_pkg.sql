@@ -17,7 +17,18 @@ create or replace PACKAGE employee_pkg AS
 
     PROCEDURE auto_assign (p_incident_id IN NUMBER);
 
+    PROCEDURE start_task (
+        p_assignee_id IN NUMBER,
+        p_task_id IN NUMBER
+    );
+
+    PROCEDURE complete_task (
+        p_assignee_id IN NUMBER,
+        p_task_id IN NUMBER
+    );
+
 END employee_pkg;
+/
 
 create or replace PACKAGE BODY employee_pkg AS
 
@@ -153,4 +164,51 @@ create or replace PACKAGE BODY employee_pkg AS
             NULL;
     END auto_assign;
 
+   
+    PROCEDURE start_task (
+        p_assignee_id IN NUMBER,
+        p_task_id IN NUMBER
+    )
+    AS
+        v_assigned_to tasks.assigned_to%TYPE;
+    BEGIN
+        SELECT assigned_to
+        INTO v_assigned_to
+        FROM tasks
+        WHERE task_id = p_task_id;
+
+        IF p_assignee_id != v_assigned_to THEN
+            RAISE_APPLICATION_ERROR(-20020, 'this task has not been assigned to you so you cannot start it');
+        END IF;
+
+        UPDATE tasks
+        SET status = 'IN_PROGRESS'
+        WHERE task_id = p_task_id;
+        COMMIT;
+    END start_task;
+
+    
+    PROCEDURE complete_task (
+        p_assignee_id IN NUMBER,
+        p_task_id IN NUMBER
+    )
+    AS
+        v_assigned_to tasks.assigned_to%TYPE;
+    BEGIN
+        SELECT assigned_to
+        INTO v_assigned_to
+        FROM tasks
+        WHERE task_id = p_task_id;
+
+        IF p_assignee_id != v_assigned_to THEN
+            RAISE_APPLICATION_ERROR(-20020, 'this task has not been assigned to you so you cannot complete it');
+        END IF;
+
+        UPDATE tasks
+        SET status = 'COMPLETE'
+        WHERE task_id = p_task_id;
+        COMMIT;
+    END complete_task;
+
 END employee_pkg;
+/
