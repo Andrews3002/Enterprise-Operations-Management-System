@@ -237,7 +237,7 @@ create or replace PACKAGE BODY supervisor_pkg AS
         WHERE task_id = p_task_id;
 
         IF p_creator_id != v_created_by THEN
-            RAISE_APPLICATION_ERROR(-20020, 'you did not create this task so you so you cannot reopen it');
+            RAISE_APPLICATION_ERROR(-20020, 'you did not create this task, so you cannot reopen it');
         END IF;
 
         IF v_current_status = 'CANCELLED' THEN
