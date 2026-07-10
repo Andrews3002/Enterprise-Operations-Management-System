@@ -224,14 +224,19 @@ create or replace PACKAGE BODY supervisor_pkg AS
     )
     AS
         v_created_by tasks.created_by%TYPE;
+        v_status tasks.status%TYPE;
     BEGIN
-        SELECT created_by
-        INTO v_created_by
+        SELECT created_by, status
+        INTO v_created_by, v_status
         FROM tasks
         WHERE task_id = p_task_id;
 
         IF p_creator_id != v_created_by THEN
             RAISE_APPLICATION_ERROR(-20020, 'this task was not created by you, so you cannot cancel it');
+        END IF;
+
+        IF v_status = 'DONE' THEN
+            RAISE_APPLICATION_ERROR(-20020, 'the task has already been completed');
         END IF;
 
         UPDATE tasks
