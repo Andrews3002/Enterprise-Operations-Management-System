@@ -22,11 +22,6 @@ create or replace PACKAGE employee_pkg AS
         p_task_id IN NUMBER
     );
 
-    PROCEDURE reopen_task (
-        p_assignee_id IN NUMBER,
-        p_task_id IN NUMBER
-    );
-
 END employee_pkg;
 /
 
@@ -191,34 +186,6 @@ create or replace PACKAGE BODY employee_pkg AS
         WHERE task_id = p_task_id;
         COMMIT;
     END complete_task;
-
-    
-    PROCEDURE reopen_task (
-        p_assignee_id IN NUMBER,
-        p_task_id IN NUMBER
-    )
-    AS
-        v_assigned_to tasks.assigned_to%TYPE;
-        v_current_status tasks.status%TYPE;
-    BEGIN
-        SELECT assigned_to, status
-        INTO v_assigned_to, v_current_status
-        FROM tasks
-        WHERE task_id = p_task_id;
-
-        IF p_assignee_id != v_assigned_to THEN
-            RAISE_APPLICATION_ERROR(-20020, 'this task has not been assigned to you so you cannot complete it');
-        END IF;
-
-        IF v_current_status = 'CANCELLED' THEN
-            RAISE_APPLICATION_ERROR(-20020, 'the task has been cancelled');
-        END IF;
-
-        UPDATE tasks
-        SET status = 'IN_PROGRESS'
-        WHERE task_id = p_task_id;
-        COMMIT;
-    END reopen_task;
 
 END employee_pkg;
 /

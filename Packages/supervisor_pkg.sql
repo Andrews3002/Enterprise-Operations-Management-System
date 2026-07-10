@@ -21,6 +21,11 @@ create or replace PACKAGE supervisor_pkg AS
         due_date DATE
     );
 
+    PROCEDURE reopen_task (
+        p_creator_id IN NUMBER,
+        p_task_id IN NUMBER
+    );
+
     PROCEDURE cancel_task (
         p_creator_id IN NUMBER,
         p_task_id IN NUMBER
@@ -217,6 +222,33 @@ create or replace PACKAGE BODY supervisor_pkg AS
         VALUES (assigned_to, created_by, title, priority, due_date);
         COMMIT;
     END assign_task;
+
+    PROCEDURE reopen_task (
+        p_creator_id IN NUMBER,
+        p_task_id IN NUMBER
+    )
+    AS
+        v_created_by tasks.created_by%TYPE;
+        v_current_status tasks.status%TYPE;
+    BEGIN
+        SELECT created_by, status
+        INTO v_created_by, v_current_status
+        FROM tasks
+        WHERE task_id = p_task_id;
+
+        IF p_creator_id != v_created_by THEN
+            RAISE_APPLICATION_ERROR(-20020, 'you did not create this task so you so you cannot reopen it');
+        END IF;
+
+        IF v_current_status = 'CANCELLED' THEN
+            RAISE_APPLICATION_ERROR(-20020, 'the task has been cancelled');
+        END IF;
+
+        UPDATE tasks
+        SET status = 'IN_PROGRESS'
+        WHERE task_id = p_task_id;
+        COMMIT;
+    END reopen_task;
 
     PROCEDURE cancel_task (
         p_creator_id IN NUMBER,
