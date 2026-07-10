@@ -10,10 +10,16 @@ BEGIN
         UPDATE departments
         SET manager_id = :NEW.emp_id
         WHERE dept_id = :NEW.dept_id;
+
+        IF :OLD.dept_id != :NEW.dept_id THEN
+            UPDATE departments
+            SET manager_id = NULL
+            WHERE dept_id = :OLD.dept_id;
+        END IF;
     ELSIF :OLD.role_id = 3 AND :NEW.role_id != 3 THEN
         UPDATE departments
         SET manager_id = NULL
-        WHERE dept_id = :OLD.dept_id;
+        WHERE dept_id = :NEW.dept_id;
     END IF;
 END;
 /
