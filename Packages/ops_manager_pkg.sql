@@ -12,6 +12,7 @@ create or replace PACKAGE ops_manager_pkg AS
     );
 
 END ops_manager_pkg;
+/
 
 create or replace PACKAGE BODY ops_manager_pkg AS
 
@@ -23,12 +24,17 @@ create or replace PACKAGE BODY ops_manager_pkg AS
         v_reported_at incidents.reported_at%TYPE;
         v_old_status incidents.status%TYPE;
         v_minutes NUMBER;
+        v_assigned_to incidents.assigned_to%TYPE;
     BEGIN
-        SELECT reported_at, status
-        INTO v_reported_at, v_old_status
+        SELECT reported_at, status, assigned_to
+        INTO v_reported_at, v_old_status, v_assigned_to
         FROM incidents
         WHERE incident_id = p_incident_id
         FOR UPDATE;
+
+        IF v_assigned_to != p_resolved_by THEN
+            RAISE_APPLICATION_ERROR(-20010,'you were not assigned this incident and therefore cannot resolve it');
+        END IF;
 
         IF v_old_status = 'RESOLVED' THEN
             RAISE_APPLICATION_ERROR(-20010,
@@ -73,3 +79,4 @@ create or replace PACKAGE BODY ops_manager_pkg AS
     END department_spend;
 
 END ops_manager_pkg;
+/
