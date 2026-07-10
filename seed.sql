@@ -156,8 +156,8 @@ END;
 /
 
 BEGIN
-    ops_manager_pkg.resolve_incident(1, 9, 'Email server restarted and restored.');
-    ops_manager_pkg.resolve_incident(3, 9, 'VPN certificates renewed.');
+    ops_manager_pkg.resolve_incident(1, 4, 'Email server restarted and restored.');
+    ops_manager_pkg.resolve_incident(3, 15, 'VPN certificates renewed.');
 END;
 /
 
@@ -173,10 +173,10 @@ END;
 /
 
 BEGIN
-    ops_manager_pkg.department_spend(1, 12500);
-    ops_manager_pkg.department_spend(2, 87000);
-    ops_manager_pkg.department_spend(3, 45000);
-    ops_manager_pkg.department_spend(4, 8200);
-    ops_manager_pkg.department_spend(5, 1100);
+    ops_manager_pkg.department_spend(1, 4, 12500);
+    ops_manager_pkg.department_spend(2, 9, 87000);
+    ops_manager_pkg.department_spend(3, 15, 45000);
+    ops_manager_pkg.department_spend(4, 20, 8200);
+    ops_manager_pkg.department_spend(5, 25, 1100);
 END;
 /

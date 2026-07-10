@@ -8,6 +8,7 @@ create or replace PACKAGE ops_manager_pkg AS
 
     PROCEDURE department_spend(
         p_dept_id NUMBER,
+        p_user_id NUMBER,
         p_amount_spent NUMBER
     );
 
@@ -63,10 +64,21 @@ create or replace PACKAGE BODY ops_manager_pkg AS
 
     PROCEDURE department_spend(
         p_dept_id NUMBER,
+        p_user_id NUMBER,
         p_amount_spent NUMBER
     )
     AS
+        v_user_dept_id employees.dept_id%TYPE;
     BEGIN
+        SELECT dept_id
+        INTO v_user_dept_id
+        FROM employees
+        WHERE emp_id = p_user_id;
+
+        IF v_user_dept_id != p_dept_id THEN
+            RAISE_APPLICATION_ERROR(-20001, 'You can only spend funds on behalf of your own department');
+        END IF;
+        
         UPDATE budgets
         SET spent = NVL(spent, 0) + p_amount_spent
         WHERE dept_id = p_dept_id;
