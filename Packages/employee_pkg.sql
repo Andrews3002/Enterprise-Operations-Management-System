@@ -102,10 +102,10 @@ create or replace PACKAGE BODY employee_pkg AS
     END submit_request;
 
     FUNCTION log_incident (
-        p_dept_id     IN NUMBER,
+        p_dept_id IN NUMBER,
         p_reported_by IN NUMBER,
-        p_title       IN VARCHAR2,
-        p_severity    IN VARCHAR2,
+        p_title IN VARCHAR2,
+        p_severity IN VARCHAR2,
         p_description IN VARCHAR2 DEFAULT NULL
     ) RETURN NUMBER AS
         v_incident_id incidents.incident_id%TYPE;
