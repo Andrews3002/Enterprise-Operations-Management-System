@@ -21,6 +21,11 @@ create or replace PACKAGE supervisor_pkg AS
         due_date DATE
     );
 
+    PROCEDURE cancel_task (
+        p_creator_id IN NUMBER,
+        p_task_id IN NUMBER
+    );
+
 END supervisor_pkg;
 /
 
@@ -212,6 +217,28 @@ create or replace PACKAGE BODY supervisor_pkg AS
         VALUES (assigned_to, created_by, title, priority, due_date);
         COMMIT;
     END assign_task;
+
+    PROCEDURE cancel_task (
+        p_creator_id IN NUMBER,
+        p_task_id IN NUMBER
+    )
+    AS
+        v_created_by tasks.created_by%TYPE;
+    BEGIN
+        SELECT created_by
+        INTO v_created_by
+        FROM tasks
+        WHERE task_id = p_task_id;
+
+        IF p_creator_id != v_created_by THEN
+            RAISE_APPLICATION_ERROR(-20020, 'this task was not created by you, so you cannot cancel it');
+        END IF;
+
+        UPDATE tasks
+        SET status = 'CANCELLED'
+        WHERE task_id = p_task_id;
+        COMMIT;
+    END cancel_task;
 
 END supervisor_pkg;
 /
