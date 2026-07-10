@@ -67,7 +67,7 @@ create or replace PACKAGE BODY executive_pkg AS
             FROM employees e
             JOIN departments d ON d.dept_id = e.dept_id
             LEFT JOIN tasks  t ON t.assigned_to = e.emp_id
-            AND t.status IN ('OPEN','IN_PROGRESS')
+            AND t.status IN ('IN_PROGRESS')
             WHERE e.is_active = 1
             GROUP BY e.emp_id, e.first_name, e.last_name, e.dept_id, d.dept_name
             ORDER BY d.dept_name, dept_workload_rank;
