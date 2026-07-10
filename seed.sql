@@ -76,12 +76,6 @@ INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Robert', 'Miller', 'robert.miller@company.com', 1, 4);
 COMMIT;
 
--- Assigning the manager for the HR department (ensure the manager id is set to the employee with the ops manager role for this department and the correct department is referenced)
-UPDATE DEPARTMENTS
-SET manager_id = 4
-WHERE dept_id = 1;
-COMMIT;
-
 -- Information Technology (make sure and change dept_ids and role_ids to reference the correct departments you want the employee in and the role you want the employee to have)
 INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('David', 'Taylor', 'david.taylor@company.com', 2, 1);
@@ -97,12 +91,6 @@ INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Sophia', 'Harris', 'sophia.harris@company.com', 2, 5);
 COMMIT;
 
--- Assigning the manager for the IT department (ensure the manager id is set to the employee with the ops manager role for this department and the correct department is referenced)
-UPDATE DEPARTMENTS
-SET manager_id = 9
-WHERE dept_id = 2;
-COMMIT;
-
 -- Accounts (make sure and change dept_ids and role_ids to reference the correct departments you want the employee in and the role you want the employee to have)
 INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Benjamin', 'Martin', 'benjamin.martin@company.com', 3, 1);
@@ -114,12 +102,6 @@ INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Charlotte', 'Martinez', 'charlotte.martinez@company.com', 3, 3);
 INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Henry', 'Robinson', 'henry.robinson@company.com', 3, 4);
-COMMIT;
-
--- Assigning the manager for the Accounts department (ensure the manager id is set to the employee with the ops manager role for this department and the correct department is referenced)
-UPDATE DEPARTMENTS
-SET manager_id = 15
-WHERE dept_id = 3;
 COMMIT;
 
 -- Procurement (make sure and change dept_ids and role_ids to reference the correct departments you want the employee in and the role you want the employee to have)
@@ -135,12 +117,6 @@ INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Matthew', 'Hall', 'matthew.hall@company.com', 4, 4);
 COMMIT;
 
--- Assigning the manager for the Procurement department (ensure the manager id is set to the employee with the ops manager role for this department and the correct department is referenced)
-UPDATE DEPARTMENTS
-SET manager_id = 20
-WHERE dept_id = 4;
-COMMIT;
-
 -- Internal Audit (make sure and change dept_ids and role_ids to reference the correct departments you want the employee in and the role you want the employee to have)
 INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Joseph', 'Young', 'joseph.young@company.com', 5, 1);
@@ -152,12 +128,6 @@ INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Grace', 'Scott', 'grace.scott@company.com', 5, 3);
 INSERT INTO employees (first_name, last_name, email, dept_id, role_id)
 VALUES ('Andrew', 'Green', 'andrew.green@company.com', 5, 4);
-COMMIT;
-
--- Assigning the manager for the Internal Audit department (ensure the manager id is set to the employee with the ops manager role for this department and the correct department is referenced)
-UPDATE DEPARTMENTS
-SET manager_id = 25
-WHERE dept_id = 5;
 COMMIT;
 
 DECLARE
