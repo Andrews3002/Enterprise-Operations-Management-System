@@ -18,7 +18,7 @@ BEGIN
     WHERE emp_id = :NEW.assigned_to; 
 
     IF v_creator_level <= v_assignee_level THEN
-        RAISE_APPLICATION_ERROR(-20020, 'cannot assign tasks to users with a higher role level than you');
+        RAISE_APPLICATION_ERROR(-20020, 'cannot assign tasks to users with an equal or higher role level than you');
     END IF;
 END;
 /
