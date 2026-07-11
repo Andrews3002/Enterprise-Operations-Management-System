@@ -20,7 +20,7 @@ def log_incident(body: LogIncidentBody):
             except oracledb.DatabaseError as e:
                 raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/{incident_id}/resolve")
+@router.patch("/{incident_id}/resolve")
 def resolve_incident(incident_id: int, body: ResolveIncidentBody):
     with get_connection() as conn:
         with conn.cursor() as cur:
