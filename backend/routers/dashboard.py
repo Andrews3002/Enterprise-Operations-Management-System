@@ -34,3 +34,14 @@ def refresh_dashboard():
                 return {"message": "Dashboard refreshed"}
             except oracledb.DatabaseError as e:
                 raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/snapshot")
+def take_snapshot():
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            try:
+                cur.callproc("take_kpi_snapshot")
+                conn.commit()
+                return {"message": "KPI snapshot taken"}
+            except oracledb.DatabaseError as e:
+                raise HTTPException(status_code=500, detail=str(e))
