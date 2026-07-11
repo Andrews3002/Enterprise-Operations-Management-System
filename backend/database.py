@@ -7,30 +7,30 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def setup_production_wallet():
-    wallet_dir = Path("/tmp/oracle_wallet")
-    zip_path = Path("/tmp/wallet.zip")
-    
-    if not wallet_dir.exists():
-        wallet_dir.mkdir(parents=True, exist_ok=True)
+def setup_wallet():
+    # Cloud production environment that will use the wallet from environment variables
+    encoded_wallet = os.getenv("BASE64_WALLET_ZIP")
+    if encoded_wallet:
+        wallet_dir = Path("/tmp/oracle_wallet")
+        zip_path = Path("/tmp/wallet.zip")
         
-        encoded_wallet = os.getenv("BASE64_WALLET_ZIP")
-        if not encoded_wallet:
-            raise ValueError("BASE64_WALLET_ZIP environment variable is missing!")
+        if not wallet_dir.exists():
+            wallet_dir.mkdir(parents=True, exist_ok=True)
+            with open(zip_path, "wb") as f:
+                f.write(base64.b64decode(encoded_wallet))
+            with zipfile.ZipFile(zip_path, "r") as zip_ref:
+                zip_ref.extractall(wallet_dir)
+            zip_path.unlink()
+        return str(wallet_dir)
         
-        with open(zip_path, "wb") as f:
-            f.write(base64.b64decode(encoded_wallet))
-            
-        #Extracting the files into your temporary folder
-        with zipfile.ZipFile(zip_path, "r") as zip_ref:
-            zip_ref.extractall(wallet_dir)
-            
-        zip_path.unlink()
+    # Local development environment to fallback to that uses the direct path to my oracle database wallet (which will not be pushed to github)
+    local_path = Path("./oracle_wallet")
+    if local_path.exists():
+        return str(local_path.resolve())
         
-    return str(wallet_dir)
+    raise ValueError("No Oracle wallet configuration found.")
 
-# Initializing the wallet path on startup
-WALLET_PATH = setup_production_wallet()
+WALLET_PATH = setup_wallet()
 
 pool = oracledb.create_pool(
     user=os.getenv("DB_USER"),
