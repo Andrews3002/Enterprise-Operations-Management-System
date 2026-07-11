@@ -45,3 +45,16 @@ def take_snapshot():
                 return {"message": "KPI snapshot taken"}
             except oracledb.DatabaseError as e:
                 raise HTTPException(status_code=500, detail=str(e))
+            
+@router.post("/spend")
+def record_spend(body: DepartmentSpendBody):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            try:
+                cur.callproc("ops_manager_pkg.department_spend", [
+                    body.dept_id, body.user_id, body.amount
+                ])
+                conn.commit()
+                return {"message": "Spend recorded"}
+            except oracledb.DatabaseError as e:
+                raise HTTPException(status_code=400, detail=str(e))
