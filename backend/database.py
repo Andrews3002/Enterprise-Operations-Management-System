@@ -40,7 +40,8 @@ pool = oracledb.create_pool(
     max=10,
     increment=1,
     config_dir=WALLET_PATH,
-    wallet_location=WALLET_PATH
+    wallet_location=WALLET_PATH,
+    wallet_password=os.getenv("WALLET_PASSWORD")
 )
 
 def get_connection():

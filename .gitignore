@@ -2,4 +2,5 @@
 currentPhase.sql
 current_tests.txt
 walkthrough.txt
+__pycache__/
 oracle_wallet/
