@@ -34,5 +34,6 @@ class TaskActionBody(BaseModel):
     actor_id: int
 
 class DepartmentSpendBody(BaseModel):
+    dept_id: int
     user_id: int
     amount: float
