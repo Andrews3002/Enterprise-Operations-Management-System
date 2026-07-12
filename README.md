@@ -167,22 +167,49 @@ Base URL: `http://localhost:8000`
 
 ## Running Locally
 
-**Prerequisites:** Oracle Database 19c (XE is sufficient), Python 3.12+, Node 20+
+**Prerequisites:** Oracle Autonomous Database (wallet-based), Python 3.12+, Node 20+
+
+### Database Connection
+
+This project connects to Oracle Autonomous Database using a wallet. The connection layer supports two environments automatically:
+
+**Local development** — place your unzipped wallet folder at `backend/oracle_wallet/`. It is excluded from version control via `.gitignore`. Set your `.env`:
+
+```env
+DB_USER=ADMIN
+DB_PASSWORD=your_db_password
+DB_DSN=eomsdb_high
+WALLET_PASSWORD=your_wallet_password
+```
+
+**Cloud deployment** — base64-encode your wallet zip and set it as an environment variable. The app decodes and extracts it to `/tmp/oracle_wallet` at startup:
 
 ```bash
-# 1. Database — run scripts in order
-sqlplus ADMIN@localhost:1521/XEPDB1 @database/schema/01_tables.sql
-sqlplus ADMIN@localhost:1521/XEPDB1 @database/schema/02_indexes.sql
-sqlplus ADMIN@localhost:1521/XEPDB1 @database/schema/03_constraints.sql
-# Run packages, triggers, security, seed files
+# Encode your wallet zip (run once locally)
+base64 -w 0 wallet.zip > wallet_b64.txt
+```
 
-# 2. Backend
+Then set these environment variables on your deployment platform:
+
+```env
+DB_USER=ADMIN
+DB_PASSWORD=your_db_password
+DB_DSN=eomsdb_high
+WALLET_PASSWORD=your_wallet_password
+BASE64_WALLET_ZIP=<contents of wallet_b64.txt>
+```
+
+The connection module checks for `BASE64_WALLET_ZIP` first. If absent, it falls back to `./oracle_wallet`. If neither exists, startup fails with a clear error.
+
+### Starting the App
+
+```bash
+# Backend
 cd backend
 pip install -r requirements.txt
-# Create .env with DB_USER, DB_PASSWORD, DB_DSN
 uvicorn main:app --reload
 
-# 3. Frontend
+# Frontend (separate terminal)
 cd frontend
 npm install
 npm run dev
