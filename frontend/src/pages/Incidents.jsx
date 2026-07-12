@@ -2,6 +2,7 @@ import { useState } from "react";
 import { logIncident, resolveIncident } from "../api";
 import {
     h1,
+    h2,
     inputStyle,
     Card,
     Field,

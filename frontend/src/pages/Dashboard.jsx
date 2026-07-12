@@ -3,6 +3,7 @@ import { getDashboard, refreshDashboard, takeSnapshot } from "../api";
 import StatCard from "../components/StatCard";
 import {
     h1,
+    h2,
     inputStyle,
     Card,
     Field,
