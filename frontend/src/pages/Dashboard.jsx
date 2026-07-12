@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { getDashboard, refreshDashboard, takeSnapshot } from "../api";
 import StatCard from "../components/StatCard";
+import {
+    h1,
+    inputStyle,
+    Card,
+    Field,
+    Btn,
+    Feedback,
+} from "../components/shared";
 
 export default function Dashboard() {
     const [data, setData] = useState([]);

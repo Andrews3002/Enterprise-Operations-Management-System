@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { logIncident, resolveIncident } from "../api";
+import {
+    h1,
+    inputStyle,
+    Card,
+    Field,
+    Btn,
+    Feedback,
+} from "../components/shared";
 
 export default function Incidents() {
     const [logForm, setLog] = useState({

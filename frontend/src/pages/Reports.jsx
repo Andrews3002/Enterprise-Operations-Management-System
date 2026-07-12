@@ -23,6 +23,14 @@ import {
     getAging,
     getKpiTrend,
 } from "../api";
+import {
+    h1,
+    inputStyle,
+    Card,
+    Field,
+    Btn,
+    Feedback,
+} from "../components/shared";
 
 const COLORS = ["#2563eb", "#16a34a", "#f59e0b", "#dc2626", "#7c3aed"];
 
