@@ -8,7 +8,7 @@ app = FastAPI(title="Enterprise Operations Management System API", version="1.0.
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite default port
+    allow_origins=["http://localhost:5173", "*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
