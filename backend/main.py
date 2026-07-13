@@ -8,7 +8,7 @@ app = FastAPI(title="Enterprise Operations Management System API", version="1.0.
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "*"],
+    allow_origins=["http://localhost:5173", "https://enterprise-operations-management-system-1.onrender.com"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
