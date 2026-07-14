@@ -237,7 +237,7 @@ export default function Reports() {
                             <ResponsiveContainer width="100%" height={280}>
                                 <BarChart data={data}>
                                     <XAxis
-                                        dataKey="workflow_name"
+                                        dataKey="stage_name"
                                         tick={{ fontSize: 12 }}
                                     />
                                     <YAxis tick={{ fontSize: 12 }} />
