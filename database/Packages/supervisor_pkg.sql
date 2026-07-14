@@ -217,7 +217,18 @@ create or replace PACKAGE BODY supervisor_pkg AS
         due_date DATE
     )
     IS
+        v_role_id roles.role_id%TYPE;
     BEGIN
+        
+        SELECT role_id
+        INTO v_role_id
+        FROM employees
+        WHERE emp_id = created_by;
+
+        IF v_role_id IN (4, 1) THEN
+            RAISE_APPLICATION_ERROR(-20020, 'Only managers and supervisors can assign tasks');
+        END IF;
+
         INSERT INTO tasks (assigned_to, created_by, title, priority, due_date)
         VALUES (assigned_to, created_by, title, priority, due_date);
         COMMIT;
